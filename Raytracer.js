@@ -27,10 +27,10 @@ class Raytracer {
 		
 		// Set single ray direction
 		if( keys.ArrowLeft ){
-			camera.angle = mod( camera.angle-0.05, Math.PI*2 )
+			camera.angle = mod( camera.angle-0.02, Math.PI*2 )
 			camera.init()
 		}else if( keys.ArrowRight ){
-			camera.angle = mod( camera.angle+0.05, Math.PI*2 )
+			camera.angle = mod( camera.angle+0.02, Math.PI*2 )
 			camera.init()
 		}
 		
