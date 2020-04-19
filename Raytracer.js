@@ -15,7 +15,7 @@ class Raytracer {
 	}
 	
 	init(){
-		this.ray = new Ray( this.pos, 0, flags.nBounces, "#FFFFFF" )
+		this.ray = new Ray( this.pos, 0, flags.nBounces, Colour.WHITE )
 		
 		// Clear canvas
 		this.canvas.fillStyle = "#000000"
