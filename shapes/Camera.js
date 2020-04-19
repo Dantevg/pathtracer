@@ -48,7 +48,7 @@ class Camera extends Line {
 	drawCanvas( canvas, height ){
 		for( let i = 0; i < this.res; i++ ){
 			if( this.canvas[i] ){
-				// this.canvas[i].a = 0.1
+				this.canvas[i].a = 0.05
 				canvas.fillStyle = this.canvas[i].toString()
 				canvas.fillRect( i, height-50, 1, 50 )
 			}

@@ -48,11 +48,12 @@ class Ray {
 				this.object.material.bounce( this )
 				let colours = []
 				for( const ray of this.children ){
-					colours.push( ray.cast( scene ) )
+					const colour = ray.cast( scene )
+					if( colour ) colours.push( colour )
 				}
-				return Colour.multiply( Raytracer.averageColour(colours), this.object.colour )
+				return Raytracer.averageColour(colours).multiply( this.object.colour, true )
 			}else{
-				return this.object.colour
+				return new Colour( this.object.colour )
 			}
 			
 		}
@@ -67,7 +68,7 @@ class Ray {
 	drawPoint( canvas ){
 		if( !this.to ){ return }
 		canvas.beginPath()
-		const colour = Colour.multiply( this.colour, this.object.colour )
+		const colour = Colour.multiply( this.colour, this.object.colour, this.colour.a )
 		canvas.fillStyle = colour.setAlpha(0.1).toString()
 		canvas.fillRect( this.to.x, this.to.y, 1, 1 )
 		canvas.fill()
@@ -80,9 +81,9 @@ class Ray {
 	
 	drawLine( canvas ){
 		if( !this.to ){ return }
-		// canvas.strokeStyle = colour.setAlpha( colour.getAlpha()*1000/this.dist ).toString()
-		// canvas.strokeStyle = this.colour.setAlpha(0.1).toString()
-		canvas.strokeStyle = this.colour.toString()
+		// canvas.strokeStyle = colour.setAlpha( colour.a*1000/this.dist ).toString()
+		canvas.strokeStyle = this.colour.setAlpha(0.1).toString()
+		// canvas.strokeStyle = this.colour.toString()
 		canvas.beginPath()
 		canvas.moveTo( this.pos.x, this.pos.y )
 		canvas.lineTo( this.to.x, this.to.y )

@@ -10,7 +10,7 @@ class Transmissive {
 	bounce( ray ){
 		const normal = ray.object.getNormalFromPoint( ray.to )
 		const direction = ray.dir
-		const colour = Colour.multiply( ray.colour, ray.object.colour )
+		const colour = Colour.multiply( ray.colour, ray.object.colour, ray.colour.a )
 		colour.a *= this.transparency
 		if( colour.a < 0.1 ){ return }
 		

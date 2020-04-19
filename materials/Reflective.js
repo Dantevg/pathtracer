@@ -7,9 +7,9 @@ class Reflective {
 	bounce( ray ){
 		const normal = ray.object.getNormalFromPoint( ray.to )
 		const direction = Vector.subtract( ray.dir, Vector.multiply( normal, 2*normal.dot(ray.dir) ) )
-		const colour = Colour.multiply( ray.colour, ray.object.colour )
-		// colour.setAlpha( colour.getAlpha()*(10/Math.sqrt(ray.dist)) ) // TODO: weigh colour by angle
-		// if( colour.getAlpha() < 0.01 ){ return }
+		const colour = Colour.multiply( ray.colour, ray.object.colour, ray.colour.a )
+		// colour.setAlpha( colour.a*(10/Math.sqrt(ray.dist)) ) // TODO: weigh colour by angle
+		// if( colour.a < 0.01 ){ return }
 		
 		const min = mod( normal.toAngles()-Math.PI/2, Math.PI*2 )
 		const max = mod( normal.toAngles()+Math.PI/2, Math.PI*2 )
