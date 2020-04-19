@@ -2,7 +2,7 @@ class Line {
 	constructor( x1, y1, x2, y2, colour, material ){
 		this.a = new Vector( x1, y1 )
 		this.b = new Vector( x2, y2 )
-		this.colour = colour
+		this.colour = new Colour(colour)
 		this.material = material
 	}
 	
@@ -44,7 +44,7 @@ class Line {
 	
 	draw( canvas ){
 		if( flags.drawObjectBorders ){
-			canvas.strokeStyle = this.colour ? this.colour : "#FFFFFF"
+			canvas.strokeStyle = this.colour ? this.colour.toString() : "#FFFFFF"
 			canvas.beginPath()
 			canvas.moveTo( this.a.x-0.5, this.a.y-0.5 )
 			canvas.lineTo( this.b.x-0.5, this.b.y-0.5 )

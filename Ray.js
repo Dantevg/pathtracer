@@ -17,7 +17,7 @@ class Ray {
 			this.depth = parentOrDepth
 		}
 		
-		this.colour = colour
+		this.colour = new Colour(colour)
 	}
 	
 	cast( scene ){
@@ -50,7 +50,7 @@ class Ray {
 				for( const ray of this.children ){
 					colours.push( ray.cast( scene ) )
 				}
-				return Raytracer.blendColour( tinycolor(Raytracer.blendColours(colours)), tinycolor(this.object.colour) ).toString()
+				return Colour.multiply( Raytracer.averageColour(colours), this.object.colour )
 			}else{
 				return this.object.colour
 			}
@@ -67,8 +67,7 @@ class Ray {
 	drawPoint( canvas ){
 		if( !this.to ){ return }
 		canvas.beginPath()
-		const colour = Raytracer.blendColour( tinycolor(this.colour), tinycolor(this.object.colour) )
-		// canvas.fillStyle = tinycolor( this.object.colour ).setAlpha( 1000/this.dist ).toString()
+		const colour = Colour.multiply( this.colour, this.object.colour )
 		canvas.fillStyle = colour.setAlpha(0.1).toString()
 		canvas.fillRect( this.to.x, this.to.y, 1, 1 )
 		canvas.fill()
@@ -81,10 +80,9 @@ class Ray {
 	
 	drawLine( canvas ){
 		if( !this.to ){ return }
-		const colour = tinycolor( this.colour )
 		// canvas.strokeStyle = colour.setAlpha( colour.getAlpha()*1000/this.dist ).toString()
-		// canvas.strokeStyle = colour.setAlpha(0.1).toString()
-		canvas.strokeStyle = this.colour
+		// canvas.strokeStyle = this.colour.setAlpha(0.1).toString()
+		canvas.strokeStyle = this.colour.toString()
 		canvas.beginPath()
 		canvas.moveTo( this.pos.x, this.pos.y )
 		canvas.lineTo( this.to.x, this.to.y )

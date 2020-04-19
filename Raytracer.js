@@ -75,30 +75,21 @@ class Raytracer {
 		}
 	}
 	
-	static blendColour( c1, c2 ){
-		return tinycolor({
-			r: (c1._r/255 * c2._r/255) * 255,
-			g: (c1._g/255 * c2._g/255) * 255,
-			b: (c1._b/255 * c2._b/255) * 255,
-			a: c1._a,
-		})
-	}
-	
-	static blendColours( colours ){
+	static averageColour( colours ){
 		let r = 0
 		let g = 0
 		let b = 0
 		let a = 0
 		
 		for( let i = 0; i < colours.length; i++ ){
-			const c = tinycolor( colours[i] )
-			r += c._r * c._a
-			g += c._g * c._a
-			b += c._b * c._a
-			a += c._a
+			const c = colours[i]
+			r += c.r * c.a
+			g += c.g * c.a
+			b += c.b * c.a
+			a += c.a
 		}
 		
-		return tinycolor( {r: r/colours.length, g: g/colours.length, b: b/colours.length, a: a/colours.length} ).toString()
+		return new Colour( r/colours.length, g/colours.length, b/colours.length, a/colours.length )
 	}
 	
 	static angleBetween( a, min, max ){

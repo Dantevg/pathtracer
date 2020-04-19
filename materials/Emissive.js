@@ -8,9 +8,8 @@ class Emissive {
 	bounce( ray ){
 		const normal = ray.object.getNormalFromPoint( ray.to )
 		const direction = ray.dir
-		// const colour = Raytracer.blendColour( tinycolor(ray.colour), tinycolor(ray.object.colour) )
-		const colour = tinycolor( ray.colour )
-		if( colour.getAlpha() < 0.1 ){ return }
+		// const colour = Colour.multiply( ray.colour, ray.object.colour )
+		if( ray.colour.getAlpha() < 0.1 ){ return }
 		
 		const min = mod( normal.toAngles()-Math.PI/2, Math.PI*2 )
 		const max = mod( normal.toAngles()+Math.PI/2, Math.PI*2 )
@@ -18,7 +17,7 @@ class Emissive {
 		const inside = Raytracer.angleBetween( ray.angle, min, max )
 		
 		if( inside && Raytracer.angleBetween( angle, min, max ) ){
-			ray.children.push( new Ray( ray.to, angle, ray.depth-1, colour.toString() ) )
+			ray.children.push( new Ray( ray.to, angle, ray.depth-1, ray.colour ) )
 		}
 	}
 	

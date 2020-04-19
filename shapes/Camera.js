@@ -48,8 +48,8 @@ class Camera extends Line {
 	drawCanvas( canvas, height ){
 		for( let i = 0; i < this.res; i++ ){
 			if( this.canvas[i] ){
-				canvas.fillStyle = tinycolor( this.canvas[i] ).setAlpha(0.1).toString()
-				// canvas.fillStyle = this.canvas[i]
+				// this.canvas[i].a = 0.1
+				canvas.fillStyle = this.canvas[i].toString()
 				canvas.fillRect( i, height-50, 1, 50 )
 			}
 		}

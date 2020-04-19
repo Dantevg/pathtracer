@@ -5,7 +5,7 @@ class Rect {
 		this.y = y
 		this.w = w
 		this.h = h
-		this.colour = colour
+		this.colour = new Colour(colour)
 		this.material = material
 		
 		this.walls = [
@@ -47,7 +47,7 @@ class Rect {
 	
 	draw( canvas, scene ){
 		if( flags.drawObjectFills || this.material instanceof Emissive ){
-			canvas.fillStyle = this.colour ? this.colour : canvas.fillStyle
+			canvas.fillStyle = this.colour ? this.colour.toString() : canvas.fillStyle
 			canvas.fillRect( this.x, this.y, this.w, this.h )
 		}
 		this.walls[0].draw( canvas )

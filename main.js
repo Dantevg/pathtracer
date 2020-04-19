@@ -76,7 +76,7 @@ function main(){
 		const x = Math.floor( e.x / flags.blockScale ) * flags.blockScale
 		const y = Math.floor( e.y / flags.blockScale ) * flags.blockScale
 		if( e.button == 0 ){ // Primary button, add block
-			const colour = flags.selectedRandomColour ? tinycolor.random().toString() : "#FFFFFF"
+			const colour = flags.selectedRandomColour ? Colour.random() : "#FFFFFF"
 			scene.push( new Rect( x, y, flags.blockScale, flags.blockScale, colour, new flags.selected() ) )
 		}else{ // Secondary button, remove block
 			for( const block in scene ){
@@ -114,7 +114,7 @@ function mod( n, m ){
 
 function randomBlocks( objects, n, randomColour, material ){
 	for( let i = 0; i < n; i++ ){
-		const colour = randomColour ? tinycolor.random().toString() : "#FFFFFF"
+		const colour = randomColour ? Colour.random() : "#FFFFFF"
 		objects.push( {colour: colour, material: material} )
 	}
 }
