@@ -59,7 +59,7 @@ class Raytracer {
 		
 		// Print settings
 		this.canvas.fillStyle = "#000000"
-		this.canvas.fillRect( 0, 0, 180, 160 )
+		this.canvas.fillRect( 0, 0, 180, 180 )
 		this.canvas.font = "10px monospace"
 		let i = 1
 		for( const flag in flags ){
