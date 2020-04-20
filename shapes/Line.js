@@ -52,8 +52,8 @@ class Line {
 		if( flags.drawObjectBorders ){
 			canvas.strokeStyle = this.colour.toString()
 			canvas.beginPath()
-			canvas.moveTo( this.a.x-0.5, this.a.y-0.5 )
-			canvas.lineTo( this.b.x-0.5, this.b.y-0.5 )
+			canvas.moveTo( this.a.x+0.5, this.a.y+0.5 )
+			canvas.lineTo( this.b.x+0.5, this.b.y+0.5 )
 			canvas.stroke()
 			canvas.closePath()
 		}

@@ -23,14 +23,20 @@ class Raytracer {
 	}
 	
 	draw(){
-		this.pos.set( mouse.x, mouse.y ) // Set light source on mouse position
+		if( this.pos.x != mouse.x || this.pos.y != mouse.y ){
+			this.pos.set( mouse.x, mouse.y ) // Set light source on mouse position
+			this.init()
+			// camera.init()
+		}
 		
 		// Set single ray direction
 		if( keys.ArrowLeft ){
 			camera.angle = mod( camera.angle-0.02, Math.PI*2 )
+			this.init()
 			camera.init()
 		}else if( keys.ArrowRight ){
 			camera.angle = mod( camera.angle+0.02, Math.PI*2 )
+			this.init()
 			camera.init()
 		}
 		
