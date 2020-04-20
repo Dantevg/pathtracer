@@ -17,21 +17,19 @@ class Rect {
 	}
 	
 	getIntersection( ray ){
-		let minDist = Infinity
-		let minPoint
+		let min = {
+			distSq: Infinity
+		}
 		
 		for( const wall of this.walls ){
-			const point = wall.getIntersection( ray )
-			if( point ){
-				point.object = wall
-				const dist = (ray.pos.x-point.x)**2 + (ray.pos.y-point.y)**2
-				if( dist < minDist ){
-					minDist = dist
-					minPoint = point
-				}
+			const hit = wall.getIntersection( ray )
+			if( hit && hit.distSq < min.distSq ){
+				min = hit
 			}
 		}
-		return minPoint
+		
+		min.object = this
+		if( min.point ) return min
 	}
 	
 	getNormals(){
