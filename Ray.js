@@ -17,7 +17,7 @@ class Ray {
 			this.depth = parentOrDepth
 		}
 		
-		this.colour = new Colour(colour)
+		this.colour = colour
 	}
 	
 	cast( scene ){
