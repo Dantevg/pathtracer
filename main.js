@@ -90,11 +90,11 @@ function main(){
 	
 	// Build scene
 	scene.push( new Rect( 0, 0, canvasElement.width, canvasElement.height-50, Colour.WHITE,
-		new Reflective(10) ) ) // Background
+		new Reflective(180) ) ) // Background
 	
 	const objects = []
-	randomBlocks( objects, 25, false, new Reflective(10) )
-	randomBlocks( objects, 25, true, new Reflective(10) )
+	randomBlocks( objects, 25, false, new Reflective(180) )
+	randomBlocks( objects, 5, true, new Reflective(180) )
 	// randomBlocks( objects, 50, true, new Transmissive( 45, 1, 1 ) )
 	// randomBlocks( objects, 1, false, new Emissive() )
 	fillScene( canvasElement, scene, objects )
