@@ -99,7 +99,7 @@ function main(){
 	// randomBlocks( objects, 1, false, new Emissive() )
 	fillScene( canvasElement, scene, objects )
 	
-	camera = scene[ scene.push( new Camera( 200, 200, 0, 500 ) ) - 1 ]
+	camera = scene[ scene.push( new Camera( 200, 200, 0, 1000 ) ) - 1 ]
 	
 	// Start draw loop
 	setInterval( raytracer.draw.bind(raytracer), 1/FPS*1000 )
