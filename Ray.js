@@ -49,7 +49,13 @@ class Ray {
 		// return new Colour( this.to.object.colour )
 		
 		// Only return colour for emissive materials
-		return (this.to.object.material instanceof Emissive) ? new Colour( this.to.object.colour ) : Colour.TRANSPARENT
+		if( this.to.object.material instanceof Emissive ){
+			const c = new Colour( this.to.object.colour )
+			return c.setAlpha( c.a * Math.sqrt( 10000/this.to.distSq ) )
+		}else{
+			return Colour.TRANSPARENT
+		}
+		// return (this.to.object.material instanceof Emissive) ? new Colour( this.to.object.colour ) : Colour.TRANSPARENT
 	}
 	
 	lookAt( x, y ){
