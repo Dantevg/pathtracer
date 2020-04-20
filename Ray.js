@@ -34,25 +34,22 @@ class Ray {
 		}
 		
 		if( !this.to.object ){
-			return new Colour(1,0,0)
+			return Colour.TRANSPARENT
 		}
 		
 		if( this.depth > 0 ){
 			this.ray = this.to.object.material.bounce( this )
 			if( this.ray ){
 				const colour = this.ray.cast( scene )
-				return Colour.multiply( colour, this.to.object.colour, 1 )
+				return Colour.multiply( colour, this.to.object.colour, colour.alpha )
 			}
-			
-			// let colours = []
-			// for( const ray of this.children ){
-			// 	const colour = ray.cast( scene )
-			// 	if( colour ) colours.push( colour )
-			// }
-			// return Raytracer.averageColour(colours).multiply( this.to.object.colour, true )
 		}
-		return new Colour( this.to.object.colour )
-		// return (this.to.object.material instanceof Emissive) ? new Colour( this.to.object.colour ) : Colour.BLACK
+		
+		// Always return colour
+		// return new Colour( this.to.object.colour )
+		
+		// Only return colour for emissive materials
+		return (this.to.object.material instanceof Emissive) ? new Colour( this.to.object.colour ) : Colour.TRANSPARENT
 	}
 	
 	lookAt( x, y ){
@@ -66,7 +63,7 @@ class Ray {
 		canvas.beginPath()
 		const colour = Colour.multiply( this.colour, this.to.object.colour, this.colour.a )
 		canvas.fillStyle = colour.setAlpha(0.1).toString()
-		canvas.fillRect( this.to.point.x, this.to.point.y, 1, 1 )
+		canvas.fillRect( this.to.point.x+0.5, this.to.point.y+0.5, 1, 1 )
 		canvas.fill()
 		canvas.closePath()
 		
@@ -80,7 +77,7 @@ class Ray {
 	drawLine( canvas ){
 		if( !this.to.object ){ return }
 		// canvas.strokeStyle = colour.setAlpha( colour.a*1000/this.dist ).toString()
-		canvas.strokeStyle = this.colour.setAlpha(0.1).toString()
+		canvas.strokeStyle = this.colour.setAlpha(0.01).toString()
 		// canvas.strokeStyle = this.colour.toString()
 		canvas.beginPath()
 		canvas.moveTo( this.pos.x, this.pos.y )
