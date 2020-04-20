@@ -5,9 +5,9 @@ class Reflective {
 	}
 	
 	bounce( ray ){
-		const normal = ray.object.getNormalFromPoint( ray.to )
+		const normal = ray.to.normal
 		const direction = Vector.subtract( ray.dir, Vector.multiply( normal, 2*normal.dot(ray.dir) ) )
-		const colour = Colour.multiply( ray.colour, ray.object.colour, ray.colour.a )
+		const colour = Colour.multiply( ray.colour, ray.to.object.colour, ray.colour.a )
 		// colour.setAlpha( colour.a*(10/Math.sqrt(ray.dist)) ) // TODO: weigh colour by angle
 		// if( colour.a < 0.01 ){ return }
 		
@@ -18,7 +18,8 @@ class Reflective {
 		const inside = Raytracer.angleBetween( ray.angle, min, max )
 		
 		if( (inside && flags.reflectiveInside) ? Raytracer.angleBetween( angle, max, min ) : Raytracer.angleBetween( angle, min, max ) ){
-			ray.children.push( new Ray( ray.to, angle, ray.depth-1, colour ) )
+			// ray.children.push( new Ray( ray.to, angle, ray.depth-1, colour ) )
+			return new Ray( ray.to, angle, ray.depth-1, colour )
 		}
 	}
 	

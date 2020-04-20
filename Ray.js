@@ -21,42 +21,37 @@ class Ray {
 	}
 	
 	cast( scene ){
-		this.children = []
-		
-		let minDist = Infinity
-		let minPoint
-		let minObject
-		
+		// this.children = []
+		this.ray = undefined
+
+		this.to = {distSq: Infinity}
 		for( const object of scene ){
-			const pos = object.getIntersection( this )
-			if( pos ){
-				const dist = Vector.distSq( this.pos, pos )
-				if( dist < minDist ){
-					minDist = dist
-					minPoint = pos
-					minObject = object
-				}
+			const hit = object.getIntersection( this )
+			if( hit && hit.distSq < this.to.distSq ){
+				this.to = hit
 			}
 		}
 		
-		if( minPoint ){
-			this.dist = minDist
-			this.to = minPoint
-			this.object = minObject
-			
-			if( this.depth > 0 ){
-				this.object.material.bounce( this )
-				let colours = []
-				for( const ray of this.children ){
-					const colour = ray.cast( scene )
-					if( colour ) colours.push( colour )
-				}
-				return Raytracer.averageColour(colours).multiply( this.object.colour, true )
-			}else{
-				return new Colour( this.object.colour )
+		if( !this.to.object ){
+			return new Colour(1,0,0)
+		}
+		
+		if( this.depth > 0 ){
+			this.ray = this.to.object.material.bounce( this )
+			if( this.ray ){
+				const colour = this.ray.cast( scene )
+				return Colour.multiply( colour, this.to.object.colour, 1 )
 			}
 			
+			// let colours = []
+			// for( const ray of this.children ){
+			// 	const colour = ray.cast( scene )
+			// 	if( colour ) colours.push( colour )
+			// }
+			// return Raytracer.averageColour(colours).multiply( this.to.object.colour, true )
 		}
+		return new Colour( this.to.object.colour )
+		// return (this.to.object.material instanceof Emissive) ? new Colour( this.to.object.colour ) : Colour.BLACK
 	}
 	
 	lookAt( x, y ){
@@ -66,33 +61,37 @@ class Ray {
 	}
 	
 	drawPoint( canvas ){
-		if( !this.to ){ return }
+		if( !this.to.object ){ return }
 		canvas.beginPath()
-		const colour = Colour.multiply( this.colour, this.object.colour, this.colour.a )
+		const colour = Colour.multiply( this.colour, this.to.object.colour, this.colour.a )
 		canvas.fillStyle = colour.setAlpha(0.1).toString()
-		canvas.fillRect( this.to.x, this.to.y, 1, 1 )
+		canvas.fillRect( this.to.point.x, this.to.point.y, 1, 1 )
 		canvas.fill()
 		canvas.closePath()
 		
-		for( const ray of this.children ){
-			ray.drawPoint( canvas )
-		}
+		if( this.ray ) this.ray.drawLine( canvas )
+		
+		// for( const ray of this.children ){
+		// 	ray.drawPoint( canvas )
+		// }
 	}
 	
 	drawLine( canvas ){
-		if( !this.to ){ return }
+		if( !this.to.object ){ return }
 		// canvas.strokeStyle = colour.setAlpha( colour.a*1000/this.dist ).toString()
 		canvas.strokeStyle = this.colour.setAlpha(0.1).toString()
 		// canvas.strokeStyle = this.colour.toString()
 		canvas.beginPath()
 		canvas.moveTo( this.pos.x, this.pos.y )
-		canvas.lineTo( this.to.x, this.to.y )
+		canvas.lineTo( this.to.point.x, this.to.point.y )
 		canvas.stroke()
 		canvas.closePath()
 		
-		for( const ray of this.children ){
-			ray.drawLine( canvas )
-		}
+		if( this.ray ) this.ray.drawLine( canvas )
+		
+		// for( const ray of this.children ){
+		// 	ray.drawLine( canvas )
+		// }
 	}
 	
 }
