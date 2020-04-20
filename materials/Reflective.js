@@ -19,7 +19,7 @@ class Reflective {
 		
 		if( (inside && flags.reflectiveInside) ? Raytracer.angleBetween( angle, max, min ) : Raytracer.angleBetween( angle, min, max ) ){
 			// ray.children.push( new Ray( ray.to, angle, ray.depth-1, colour ) )
-			return new Ray( ray.to, angle, ray.depth-1, colour )
+			return new Ray( ray.to.point, angle, ray.depth-1, colour )
 		}
 	}
 	

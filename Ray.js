@@ -18,12 +18,13 @@ class Ray {
 		}
 		
 		this.colour = colour
+		this.to = {}
 	}
 	
 	cast( scene ){
 		// this.children = []
 		this.ray = undefined
-
+		
 		this.to = {distSq: Infinity}
 		for( const object of scene ){
 			const hit = object.getIntersection( this )
