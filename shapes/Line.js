@@ -24,7 +24,13 @@ class Line {
 			
 			// Line intersects
 			if( t >= 0 && t <= 1 && u >= 0 ){
-				return new Vector( x1 + t*(x2-x1), y1 + t*(y2-y1) )
+				const point = new Vector( x1 + t*(x2-x1), y1 + t*(y2-y1) )
+				return {
+					object: this,
+					point: point,
+					distSq: Vector.distSq( ray.pos, point ),
+					normal: this.getNormal()
+				}
 			}
 		}
 	}
