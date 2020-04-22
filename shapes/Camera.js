@@ -6,7 +6,6 @@ class Camera extends Line {
 		this.dir = dir
 		this.angle = angle
 		this.res = res
-		this.canvas = []
 		this.init()
 	}
 	
@@ -15,7 +14,11 @@ class Camera extends Line {
 		this.dir.set( -Math.sin(this.angle), Math.cos(this.angle) )
 		this.a.set( this.pos.x - this.dir.x*10, this.pos.y - this.dir.y*10 )
 		this.b.set( this.pos.x + this.dir.x*10, this.pos.y + this.dir.y*10 )
-		// this.canvas = []
+		this.iterations = 0
+		this.canvas = []
+		for( let i = 0; i < this.res; i++ ){
+			this.canvas[i] = Colour.BLACK
+		}
 	}
 	
 	getIntersection(){
@@ -23,7 +26,7 @@ class Camera extends Line {
 	}
 	
 	draw( canvas, scene ){
-		if( mouse.x != this.b.x || mouse.y != this.b.y ){
+		if( mouse.x != this.pos.x || mouse.y != this.pos.y ){
 			this.pos.set( mouse.x, mouse.y )
 			this.init()
 		}
@@ -43,18 +46,20 @@ class Camera extends Line {
 			const ray = new Ray( pos, angle, flags.nBounces, this.colour )
 			
 			// const progress = Math.floor( Vector.distSq(this.a, pos) / this.distSq * this.res )
-			this.canvas[i] = ray.cast( scene )
+			this.canvas[i].add( ray.cast( scene ), true )
 			if( flags.drawRays ) ray.drawLine( canvas )
 			if( flags.drawRayHits ) ray.drawPoint( canvas )
 		}
+		this.iterations++
 	}
 	
 	drawCanvas( canvas, height ){
 		for( let i = 0; i < this.res; i++ ){
-			if( this.canvas[i] ){
-				canvas.fillStyle = this.canvas[i].setAlpha( this.canvas[i].a*0.1 ).toString()
+			// if( this.canvas[i] ){
+				canvas.fillStyle = Colour.multiply( this.canvas[i], new Colour(1/this.iterations) ).setAlpha(1).toString()
+				// canvas.fillStyle = this.canvas[i].setAlpha( this.canvas[i].a*0.1 ).toString()
 				canvas.fillRect( i, height-50, 1, 50 )
-			}
+			// }
 		}
 	}
 	
