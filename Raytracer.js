@@ -26,7 +26,6 @@ class Raytracer {
 		if( this.pos.x != mouse.x || this.pos.y != mouse.y ){
 			this.pos.set( mouse.x, mouse.y ) // Set light source on mouse position
 			this.init()
-			// camera.init()
 		}
 		
 		// Set single ray direction
