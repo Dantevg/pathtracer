@@ -33,6 +33,7 @@ class Ray {
 			}
 		}
 		
+		// No object in path, don't draw
 		if( !this.to.object ){
 			return Colour.TRANSPARENT
 		}
@@ -48,7 +49,7 @@ class Ray {
 		// Always return colour
 		// return new Colour( this.to.object.colour )
 		
-		// Only return colour for emissive materials
+		// Last iteration, only return colour for emissive materials
 		if( this.to.object.material instanceof Emissive ){
 			const c = new Colour( this.to.object.colour )
 			return c.setAlpha( c.a * Math.sqrt( 10000/this.to.distSq ) )
