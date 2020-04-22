@@ -65,9 +65,11 @@ function main(){
 			}else if( e.key == "ArrowUp" ){
 				flags.nBounces++
 				raytracer.init()
+				camera.init()
 			}else if( e.key == "ArrowDown" ){
 				flags.nBounces = Math.max( --flags.nBounces, 0 )
 				raytracer.init()
+				camera.init()
 			}
 		}
 	} )
