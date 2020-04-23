@@ -74,7 +74,7 @@ class Ray {
 		canvas.fill()
 		canvas.closePath()
 		
-		if( this.ray ) this.ray.drawLine( canvas )
+		if( this.ray ) this.ray.drawPoint( canvas )
 		
 		// for( const ray of this.children ){
 		// 	ray.drawPoint( canvas )
