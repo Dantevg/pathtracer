@@ -12,7 +12,7 @@ const flags = {
 	nRays: 10,
 	fov: 60,
 	blockScale: 50,
-	selected: Emissive,
+	selected: Material.emissive,
 	selectedRandomColour: false,
 	reflectiveInside: true,
 }
@@ -38,11 +38,11 @@ function main(){
 		keys[e.key] = true
 		if( e.shiftKey ){
 			if( e.key == "R" ){
-				flags.selected = Reflective
+				flags.selected = Material.glossy
 			}else if( e.key == "T" ){
-				flags.selected = Transmissive
+				flags.selected = Material.transmissive
 			}else if( e.key == "E" ){
-				flags.selected = Emissive
+				flags.selected = Material.emissive
 			}
 		}else{
 			if( e.key == "n" ){
@@ -79,7 +79,7 @@ function main(){
 		const y = Math.floor( e.y / flags.blockScale ) * flags.blockScale
 		if( e.button == 0 ){ // Primary button, add block
 			const colour = flags.selectedRandomColour ? Colour.random() : Colour.WHITE
-			scene.push( new Rect( x, y, flags.blockScale, flags.blockScale, colour, new flags.selected() ) )
+			scene.push( new Rect( x, y, flags.blockScale, flags.blockScale, colour, flags.selected ) )
 		}else{ // Secondary button, remove block
 			for( const block in scene ){
 				if( scene[block].x == x && scene[block].y == y ){
@@ -92,11 +92,11 @@ function main(){
 	
 	// Build scene
 	scene.push( new Rect( 0, 0, canvasElement.width, canvasElement.height-50, Colour.WHITE,
-		new Reflective(180) ) ) // Background
+		Material.matte ) ) // Background
 	
 	const objects = []
-	randomBlocks( objects, 25, false, new Reflective(180) )
-	randomBlocks( objects, 5, true, new Reflective(180) )
+	randomBlocks( objects, 25, false, Material.matte )
+	randomBlocks( objects, 5, true, Material.matte )
 	// randomBlocks( objects, 50, true, new Transmissive( 45, 1, 1 ) )
 	// randomBlocks( objects, 1, false, new Emissive() )
 	fillScene( canvasElement, scene, objects )

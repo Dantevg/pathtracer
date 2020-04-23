@@ -44,7 +44,7 @@ class Rect {
 	}
 	
 	draw( canvas, scene ){
-		if( flags.drawObjectFills || this.material instanceof Emissive ){
+		if( flags.drawObjectFills || this.material.emission != 0 ){
 			canvas.fillStyle = this.colour.toString()
 			canvas.fillRect( this.x, this.y, this.w, this.h )
 		}

@@ -22,8 +22,10 @@ class Ray {
 	}
 	
 	cast( scene ){
-		// this.children = []
-		this.ray = undefined
+		// Max depth reached
+		if( this.depth < 0 ){
+			return Colour.TRANSPARENT
+		}
 		
 		this.to = {distSq: Infinity}
 		for( const object of scene ){
@@ -33,30 +35,16 @@ class Ray {
 			}
 		}
 		
-		// No object in path, don't draw
-		if( !this.to.object ){
-			return Colour.TRANSPARENT
-		}
-		
-		if( this.depth > 0 ){
+		if( this.to.object ){
+			// Continue tracing (reflect/transmit)
 			this.ray = this.to.object.material.bounce( this )
 			if( this.ray ){
-				const colour = this.ray.cast( scene )
-				return Colour.multiply( colour, this.to.object.colour, colour.alpha )
+				return this.ray.cast( scene ).multiply( this.to.object.colour ).add( this.to.object.material.emission )
 			}
 		}
 		
-		// Always return colour
-		// return new Colour( this.to.object.colour )
-		
-		// Last iteration, only return colour for emissive materials
-		if( this.to.object.material instanceof Emissive ){
-			const c = new Colour( this.to.object.colour )
-			return c.setAlpha( c.a * Math.sqrt( 10000/this.to.distSq ) )
-		}else{
-			return Colour.TRANSPARENT
-		}
-		// return (this.to.object.material instanceof Emissive) ? new Colour( this.to.object.colour ) : Colour.TRANSPARENT
+		// No object in path or no continuing ray, don't draw
+		return Colour.TRANSPARENT
 	}
 	
 	lookAt( x, y ){
