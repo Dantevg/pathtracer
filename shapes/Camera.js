@@ -1,11 +1,12 @@
 class Camera extends Line {
-	constructor( x, y, angle, res ){
+	constructor( x, y, angle, res, sensitivity = 5 ){
 		const dir = new Vector( -Math.sin(angle), Math.cos(angle) )
 		super( x-dir.x*10, y-dir.y*10, x+dir.x*10, y+dir.y*10, Colour.WHITE, new Null() )
 		this.pos = new Vector( x, y )
 		this.dir = dir
 		this.angle = angle
 		this.res = res
+		this.sensitivity = sensitivity
 		this.init()
 	}
 	
@@ -55,11 +56,9 @@ class Camera extends Line {
 	
 	drawCanvas( canvas, height ){
 		for( let i = 0; i < this.res; i++ ){
-			// if( this.canvas[i] ){
-				canvas.fillStyle = Colour.multiply( this.canvas[i], new Colour(1/this.iterations) ).setAlpha(1).toString()
-				// canvas.fillStyle = this.canvas[i].setAlpha( this.canvas[i].a*0.1 ).toString()
-				canvas.fillRect( i, height-50, 1, 50 )
-			// }
+			const colour = Colour.multiply( this.canvas[i], new Colour(1/this.iterations) )
+			canvas.fillStyle = colour.multiply( new Colour(this.sensitivity) ).setAlpha(1).toString()
+			canvas.fillRect( i, height-50, 1, 50 )
 		}
 	}
 	
