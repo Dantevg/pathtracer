@@ -1,11 +1,9 @@
-class Null {
+class Null extends Material {
 	constructor(){
+		super({})
 	}
 	
 	bounce(){
+		
 	}
-	
-	draw(){
-	}
-	
 }
