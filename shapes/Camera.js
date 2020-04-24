@@ -1,5 +1,5 @@
 class Camera extends Line {
-	constructor( x, y, angle, res, sensitivity = 5 ){
+	constructor( x, y, angle, res, sensitivity = 1 ){
 		const dir = new Vector( -Math.sin(angle), Math.cos(angle) )
 		super( x-dir.x*10, y-dir.y*10, x+dir.x*10, y+dir.y*10, Colour.WHITE, new Null() )
 		this.pos = new Vector( x, y )
