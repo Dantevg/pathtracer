@@ -19,16 +19,15 @@ class Material {
 			direction = ray.dir
 		}
 		
-		const min = mod( normal.toAngles()-Math.PI/2, Math.PI*2 )
-		const max = mod( normal.toAngles()+Math.PI/2, Math.PI*2 )
-		const rot = (Math.random()-0.5)*this.roughness * Math.PI*2
-		const angle = mod( direction.toAngles() + rot, Math.PI*2 )
-		const inside = Raytracer.angleBetween( ray.angle, min, max )
-		
-		if( inside ? Raytracer.angleBetween( angle, max, min ) : Raytracer.angleBetween( angle, min, max ) ){
-			// ray.children.push( new Ray( ray.to, angle, ray.depth-1, colour ) )
-			return new Ray( ray.to.point, angle, ray.depth-1, colour )
+		const dir = new Vector( Math.random()*2-1, Math.random()*2-1 )
+		while( dir.dot( dir ) > 1 ){
+			dir.set( Math.random()*2-1, Math.random()*2-1 )
 		}
+		dir.normalize()
+		
+		// Ensure ray goes in right direction
+		dir.multiply( -Math.sign( ray.dir.dot( ray.to.normal ) * dir.dot( ray.to.normal ) ) )
+		return new Ray( ray.to.point, dir.toAngles(), ray.depth-1, colour )
 	}
 	
 	// Some default materials
