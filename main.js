@@ -6,7 +6,7 @@ const flags = {
 	drawObjectFills: false,
 	drawObjectBorders: true,
 	drawRays: true,
-	drawRayHits: true,
+	drawRayHits: false,
 	drawNormals: false,
 	nBounces: 0,
 	nRays: 10,
@@ -132,7 +132,8 @@ function fillScene( canvasElement, scene, objects ){
 			const obj = objects.splice( Math.floor(Math.random()*objects.length), 1 )[0]
 			if( obj ){
 				scene.push(
-					new Rect( x, y, flags.blockScale, flags.blockScale, obj.colour, obj.material )
+					// new Rect( x, y, flags.blockScale, flags.blockScale, obj.colour, obj.material )
+					new Circle( x, y, flags.blockScale/2, obj.colour, obj.material )
 				)
 			}
 		}
