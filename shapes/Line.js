@@ -40,8 +40,7 @@ class Line {
 	}
 	
 	getNormal(){
-		const v = this.getVector()
-		return new Vector( v.y, -v.x ).normalize()
+		return this.getVector().invert().normalize()
 	}
 	
 	getNormalFromPoint( pos ){
