@@ -54,6 +54,20 @@ class Circle {
 			canvas.closePath()
 			canvas.stroke()
 		}
+		if( flags.drawNormals ){
+			const pos = new Vector( this.x, this.y )
+			for( let i = 0; i < 8; i++ ){ // Draw 8 normals
+				const angle = i / 8 * Math.PI*2
+				const point = new Vector( this.x + Math.cos(angle)*this.r, this.y + Math.sin(angle)*this.r )
+				const normal = Vector.subtract( point, pos ).normalize().multiply(10)
+				canvas.strokeStyle = "#00FF00"
+				canvas.beginPath()
+				canvas.moveTo( point.x, point.y )
+				canvas.lineTo( point.x+normal.x, point.y+normal.y )
+				canvas.stroke()
+				canvas.closePath()
+			}
+		}
 		// this.material.draw( canvas, this, scene ) // only for ray tracing (not for path tracing)
 	}
 	
