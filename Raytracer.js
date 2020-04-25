@@ -68,7 +68,7 @@ class Raytracer {
 		this.canvas.font = "10px monospace"
 		let i = 1
 		for( const flag in flags ){
-			if( typeof flags[flag] == "function" ){
+			if( typeof flags[flag] == "object" ){
 				continue
 			}
 			this.canvas.fillStyle = "#FFFFFF"
