@@ -23,7 +23,7 @@ class Material {
 	}
 	
 	transmit( ray ){
-		
+		return ray.dir.toAngles()
 	}
 	
 	bounce( ray ){
@@ -36,7 +36,7 @@ class Material {
 		if( Math.random() >= this.transparency ){ // Reflect
 			return new Ray( ray.to.point, this.diffuse(ray), ray.depth-1, colour )
 		}else{ // Transmit
-			return new Ray( ray.to.point, ray.dir.toAngles(), ray.depth-1, colour )
+			return new Ray( ray.to.point, this.transmit(ray), ray.depth-1, colour )
 		}
 	}
 	
