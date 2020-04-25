@@ -91,12 +91,14 @@ function main(){
 	} )
 	
 	// Build scene
+	const material = new Material({roughness: 0.8})
+	
 	scene.push( new Rect( 0, 0, canvasElement.width, canvasElement.height-50, Colour.WHITE,
-		Material.matte ) ) // Background
+		material ) ) // Background
 	
 	const objects = []
-	randomBlocks( objects, 25, false, Material.matte )
-	randomBlocks( objects, 5, true, Material.glossy )
+	randomBlocks( objects, 25, false, material )
+	randomBlocks( objects, 5, true, material )
 	// randomBlocks( objects, 50, true, new Transmissive( 45, 1, 1 ) )
 	// randomBlocks( objects, 1, false, new Emissive() )
 	fillScene( canvasElement, scene, objects )
@@ -125,6 +127,7 @@ function fillScene( canvasElement, scene, objects ){
 	const min = objects.length
 	const xMax = canvasElement.width/flags.blockScale
 	const yMax = (canvasElement.height-50)/flags.blockScale
+	const halfScale = flags.blockScale / 2
 	objects.length = Math.floor(xMax) * Math.floor(yMax)
 	objects.fill( false, min )
 	for( let x = 0; x < canvasElement.width-flags.blockScale; x += flags.blockScale ){
@@ -133,7 +136,7 @@ function fillScene( canvasElement, scene, objects ){
 			if( obj ){
 				scene.push(
 					// new Rect( x, y, flags.blockScale, flags.blockScale, obj.colour, obj.material )
-					new Circle( x, y, flags.blockScale/2, obj.colour, obj.material )
+					new Circle( x+halfScale, y+halfScale, halfScale, obj.colour, obj.material )
 				)
 			}
 		}
