@@ -96,7 +96,7 @@ function main(){
 	
 	const objects = []
 	randomBlocks( objects, 25, false, Material.matte )
-	randomBlocks( objects, 5, true, Material.matte )
+	randomBlocks( objects, 5, true, Material.glossy )
 	// randomBlocks( objects, 50, true, new Transmissive( 45, 1, 1 ) )
 	// randomBlocks( objects, 1, false, new Emissive() )
 	fillScene( canvasElement, scene, objects )
