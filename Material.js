@@ -27,9 +27,6 @@ class Material {
 	}
 	
 	bounce( ray ){
-		const normal = ray.to.normal
-		let direction
-		
 		const colour = Colour.multiply( ray.colour, ray.to.object.colour, ray.colour.a ) // Only for ray visualising
 		
 		// TODO: use proprer measure of reflectance vs transmittance
