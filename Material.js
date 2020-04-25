@@ -30,10 +30,12 @@ class Material {
 		const colour = Colour.multiply( ray.colour, ray.to.object.colour, ray.colour.a ) // Only for ray visualising
 		
 		// TODO: use proprer measure of reflectance vs transmittance
-		if( Math.random() >= this.transparency ){ // Reflect
-			return new Ray( ray.to.point, this.diffuse(ray), ray.depth-1, colour )
-		}else{ // Transmit
+		if( Math.random() < this.transparency ){
 			return new Ray( ray.to.point, this.transmit(ray), ray.depth-1, colour )
+		}else if( Math.random() < this.roughness ){
+			return new Ray( ray.to.point, this.diffuse(ray), ray.depth-1, colour )
+		}else{
+			return new Ray( ray.to.point, this.specular(ray), ray.depth-1, colour )
 		}
 	}
 	
@@ -42,7 +44,7 @@ class Material {
 		return new Material({roughness: 0})
 	}
 	static get matte(){
-		return new Material({roughness: 0.2})
+		return new Material({roughness: 1})
 	}
 	static get transmissive(){
 		return new Material({roughness: 0, transparency: 1})
