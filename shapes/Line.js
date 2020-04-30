@@ -40,7 +40,7 @@ class Line {
 	}
 	
 	getNormal(){
-		return this.getVector().rotate90().normalize()
+		return this.getVector().rotate(-Math.PI/2).normalize()
 	}
 	
 	getNormalFromPoint( pos ){
