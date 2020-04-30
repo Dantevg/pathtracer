@@ -50,7 +50,7 @@ class Material {
 		return new Material({roughness: 0, transparency: 1})
 	}
 	static get emissive(){
-		return new Material({emission: 10})
+		return new Material({emission: 1})
 	}
 	
 }
