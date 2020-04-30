@@ -38,7 +38,7 @@ function main(){
 			if( e.key == "R" ){
 				flags.selected = Material.matte
 			}else if( e.key == "T" ){
-				flags.selected = Material.transmissive
+				flags.selected = Material.transparent
 			}else if( e.key == "E" ){
 				flags.selected = Material.emissive
 			}

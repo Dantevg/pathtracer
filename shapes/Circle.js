@@ -16,8 +16,7 @@ class Circle {
 		const pos = new Vector(this.x, this.y)
 		
 		// swap operands for cool effect
-		// (+ ray.dir*0.001) To prevent self-intersecting
-		const rayToCircle = Vector.subtract( ray.pos, pos ).add( Vector.multiply(ray.dir, 0.001) )
+		const rayToCircle = Vector.subtract( ray.pos, pos )
 		const A = ray.dir.dot(ray.dir) // |ray.dir|^2 == ray.length()**2
 		let B = 2 * ray.dir.dot(rayToCircle)
 		const C = rayToCircle.dot(rayToCircle) - this.r**2

@@ -1,9 +1,10 @@
 class Material {
-	constructor( {roughness, metal, transparency, emission} ){
+	constructor( {roughness, metal, transparency, emission, refraction} ){
 		this.roughness = roughness ?? 0.5
 		this.metal = metal ?? 0
 		this.transparency = transparency ?? 0
 		this.emission = emission ?? 0
+		this.refraction = refraction ?? 1.5
 	}
 	
 	specular( ray ){
@@ -19,20 +20,27 @@ class Material {
 	}
 	
 	transmit( ray ){
-		return ray.dir.toAngles()
+		// https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
+		const n = ray.ior/this.refraction
+		const c1 = ray.to.normal.dot( ray.dir )
+		const c2 = Math.sqrt( 1 - n*n * (1-c1*c1) )
+		const dir = Vector.multiply( ray.dir, n ).add( Vector.multiply( ray.to.normal, n*c1 - c2 ) )
+		return dir
 	}
 	
 	bounce( ray ){
 		const colour = Colour.multiply( ray.colour, ray.to.object.colour, ray.colour.a ) // Only for ray visualising
+		let dir
 		
 		// TODO: use proprer measure of reflectance vs transmittance
 		if( Math.random() < this.transparency ){
-			return new Ray( ray.to.point, this.transmit(ray), ray.depth-1, colour )
+			dir = this.transmit(ray)
 		}else if( Math.random() < this.roughness ){
-			return new Ray( ray.to.point, this.diffuse(ray), ray.depth-1, colour )
+			dir = this.diffuse(ray)
 		}else{
-			return new Ray( ray.to.point, this.specular(ray), ray.depth-1, colour )
+			dir = this.specular(ray)
 		}
+		return new Ray( Vector.add( ray.to.point, Vector.multiply(dir, 0.001) ), dir, ray.depth-1, colour )
 	}
 	
 	// Some default materials
@@ -42,7 +50,7 @@ class Material {
 	static get matte(){
 		return new Material({roughness: 1})
 	}
-	static get transmissive(){
+	static get transparent(){
 		return new Material({roughness: 0, transparency: 1})
 	}
 	static get emissive(){

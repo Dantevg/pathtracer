@@ -1,5 +1,5 @@
 class Ray {
-	constructor( pos, angle, parentOrDepth, colour ){
+	constructor( pos, angle, parentOrDepth, colour, ior ){
 		this.pos = pos
 		
 		if( typeof angle == "number" ){ // Angle given
@@ -18,6 +18,7 @@ class Ray {
 		}
 		
 		this.colour = colour
+		this.ior = ior ?? 1
 		this.to = {}
 	}
 	
