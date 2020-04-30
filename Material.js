@@ -11,11 +11,7 @@ class Material {
 	}
 	
 	diffuse( ray ){
-		const dir = new Vector( Math.random()*2-1, Math.random()*2-1 )
-		while( dir.dot( dir ) > 1 ){
-			dir.set( Math.random()*2-1, Math.random()*2-1 )
-		}
-		dir.normalize()
+		const dir = Vector.random2DAngle()
 		
 		// Ensure ray goes in right direction
 		dir.multiply( -Math.sign( ray.dir.dot( ray.to.normal ) * dir.dot( ray.to.normal ) ) )
