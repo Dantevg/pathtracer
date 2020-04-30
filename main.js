@@ -1,6 +1,5 @@
 const FPS = 100
 const mouse = new Vector( 0, 0 )
-const scene = []
 const keys = {}
 const flags = {
 	drawObjectFills: false,
@@ -30,7 +29,6 @@ function main(){
 	const canvasElement = document.getElementById("canvas")
 	canvasElement.width = window.innerWidth
 	canvasElement.height = window.innerHeight
-	const raytracer = new Raytracer( canvasElement, scene )
 	
 	// Set event listeners
 	canvasElement.addEventListener( "mousemove", e => mouse.set( e.x, e.y ) )
@@ -38,7 +36,7 @@ function main(){
 		keys[e.key] = true
 		if( e.shiftKey ){
 			if( e.key == "R" ){
-				flags.selected = Material.glossy
+				flags.selected = Material.matte
 			}else if( e.key == "T" ){
 				flags.selected = Material.transmissive
 			}else if( e.key == "E" ){
@@ -91,19 +89,11 @@ function main(){
 	} )
 	
 	// Build scene
-	const material = new Material({roughness: 0.8})
-	
-	scene.push( new Rect( 0, 0, canvasElement.width, canvasElement.height-50, Colour.WHITE,
-		material ) ) // Background
-	
-	const objects = []
-	randomBlocks( objects, 25, false, material )
-	randomBlocks( objects, 5, true, material )
-	// randomBlocks( objects, 50, true, new Transmissive( 45, 1, 1 ) )
-	// randomBlocks( objects, 1, false, new Emissive() )
-	fillScene( canvasElement, scene, objects )
+	scene = createScene( canvasElement )
 	
 	camera = scene[ scene.push( new Camera( 200, 200, 0, 1000 ) ) - 1 ]
+	
+	const raytracer = new Raytracer( canvasElement, scene )
 	
 	// Start draw loop
 	setInterval( raytracer.draw.bind(raytracer), 1/FPS*1000 )
@@ -114,31 +104,4 @@ function main(){
 // Source: https://stackoverflow.com/questions/4467539/javascript-modulo-gives-a-negative-result-for-negative-numbers
 function mod( n, m ){
 	return ((n % m) + m) % m
-}
-
-function randomBlocks( objects, n, randomColour, material ){
-	for( let i = 0; i < n; i++ ){
-		const colour = randomColour ? Colour.random() : Colour.WHITE
-		objects.push( {colour: colour, material: material} )
-	}
-}
-
-function fillScene( canvasElement, scene, objects ){
-	const min = objects.length
-	const xMax = canvasElement.width/flags.blockScale
-	const yMax = (canvasElement.height-50)/flags.blockScale
-	const halfScale = flags.blockScale / 2
-	objects.length = Math.floor(xMax) * Math.floor(yMax)
-	objects.fill( false, min )
-	for( let x = 0; x < canvasElement.width-flags.blockScale; x += flags.blockScale ){
-		for( let y = 0; y < canvasElement.height-flags.blockScale-50; y += flags.blockScale ){
-			const obj = objects.splice( Math.floor(Math.random()*objects.length), 1 )[0]
-			if( obj ){
-				scene.push(
-					// new Rect( x, y, flags.blockScale, flags.blockScale, obj.colour, obj.material )
-					new Circle( x+halfScale, y+halfScale, halfScale, obj.colour, obj.material )
-				)
-			}
-		}
-	}
 }
