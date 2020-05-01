@@ -11,6 +11,8 @@ class Raytracer {
 		this.scene = scene
 		this.pos = new Vector( this.width/2, this.height/2 )
 		this.angle = 0
+		this.lastframe = 0
+		this.fps = 0
 		this.init()
 	}
 	
@@ -22,7 +24,10 @@ class Raytracer {
 		this.canvas.fillRect( 0, 0, this.width, this.height )
 	}
 	
-	draw(){
+	draw( timestamp ){
+		this.fps = 1 / (timestamp - this.lastframe) * 1000
+		this.lastframe = timestamp
+		
 		if( this.pos.x != mouse.x || this.pos.y != mouse.y ){
 			this.pos.set( mouse.x, mouse.y ) // Set light source on mouse position
 			this.init()
@@ -64,9 +69,11 @@ class Raytracer {
 		
 		// Print settings
 		this.canvas.fillStyle = "#000000"
-		this.canvas.fillRect( 0, 0, 180, 180 )
+		this.canvas.fillRect( 0, 0, 180, 190 )
 		this.canvas.font = "10px monospace"
-		let i = 1
+		this.canvas.fillStyle = "#FFFFFF"
+		this.canvas.fillText( Math.round(this.fps), 10, 15 )
+		let i = 2
 		for( const flag in flags ){
 			if( typeof flags[flag] == "object" ){
 				continue
@@ -78,6 +85,8 @@ class Raytracer {
 			this.canvas.fillText( flag + ": " + flags[flag], 10, 15*i )
 			i++
 		}
+		
+		requestAnimationFrame( this.draw.bind(this) )
 	}
 	
 	static averageColour( colours ){

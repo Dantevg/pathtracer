@@ -1,4 +1,3 @@
-const FPS = 100
 const mouse = new Vector( 0, 0 )
 const keys = {}
 const flags = {
@@ -96,7 +95,7 @@ function main(){
 	const raytracer = new Raytracer( canvasElement, scene )
 	
 	// Start draw loop
-	setInterval( raytracer.draw.bind(raytracer), 1/FPS*1000 )
+	raytracer.draw()
 }
 
 // Fix JavaScript's modulo function
