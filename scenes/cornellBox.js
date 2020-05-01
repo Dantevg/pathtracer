@@ -15,5 +15,9 @@ function createScene( canvasElement ){
 	y = Math.random() * (height-300) + 150
 	scene.push( new Circle( x, y, 50, Colour.WHITE, Material.transparent ) )
 	
+	x = Math.random() * (width-300) + 150
+	y = Math.random() * (height-300) + 150
+	scene.push( new Polygon( x, y, 50, 6, 0, Colour.WHITE, Material.transparent ) )
+	
 	return scene
 }
