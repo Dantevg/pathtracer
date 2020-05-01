@@ -1,23 +1,23 @@
 function createScene( canvasElement ){
+	function randomX(){
+		return x1 + r/2 + Math.random() * (x2-x1-r)
+	}
+	function randomY(){
+		return y1 + r/2 + Math.random() * (y2-y1-r)
+	}
+	
 	const scene = []
-	const [width, height] = [canvasElement.width, canvasElement.height-50]
+	const [x1, y1, x2, y2] = [200, 0, canvasElement.width-200, canvasElement.height-50]
+	const r = 50
 	
-	scene.push( new Line( width-200, 0, 200, 0, Colour.WHITE, Material.emissive ) ) // Top
-	scene.push( new Line( 200, 0, 200, height, Colour.RED, Material.matte ) ) // Left
-	scene.push( new Line( width-200, height, width-200, 0, Colour.BLUE, Material.matte ) ) // Right
-	scene.push( new Line( 200, height, width-200, height, Colour.WHITE, Material.glossy ) ) // Bottom
+	scene.push( new Line( x2, y1, x1, y1, Colour.WHITE, Material.emissive ) ) // Top
+	scene.push( new Line( x1, y1, x1, y2, Colour.RED, Material.matte ) ) // Left
+	scene.push( new Line( x2, y2, x2, y1, Colour.BLUE, Material.matte ) ) // Right
+	scene.push( new Line( x1, y2, x2, y2, Colour.WHITE, Material.glossy ) ) // Bottom
 	
-	let x = Math.random() * (width-300) + 150
-	let y = Math.random() * (height-300) + 150
-	scene.push( new Circle( x, y, 50, Colour.WHITE, Material.matte ) )
-	
-	x = Math.random() * (width-300) + 150
-	y = Math.random() * (height-300) + 150
-	scene.push( new Circle( x, y, 50, Colour.WHITE, Material.transparent ) )
-	
-	x = Math.random() * (width-300) + 150
-	y = Math.random() * (height-300) + 150
-	scene.push( new Polygon( x, y, 50, 3, Math.PI/6, Colour.WHITE, Material.transparent ) )
+	scene.push( new Circle( randomX(), randomY(), r, Colour.WHITE, Material.matte ) )
+	scene.push( new Circle( randomX(), randomY(), r, Colour.WHITE, Material.transparent ) )
+	scene.push( new Polygon( randomX(), randomY(), r, 3, Math.PI/6, Colour.WHITE, Material.transparent ) )
 	
 	return scene
 }
