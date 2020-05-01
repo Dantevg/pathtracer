@@ -29,14 +29,29 @@ class Material {
 		return dir
 	}
 	
+	fresnel( ray ){
+		let cosi = Math.min( Math.max( -1, ray.dir.dot(ray.to.normal) ), 1 )
+		let etai = ray.ior
+		let etat = this.refraction
+		if( cosi > 0 ) [etai, etat] = [etat, etai]
+		
+		const sint = etai / etat * Math.sqrt( 1-cosi*cosi )
+		if( sint >= 1 ){
+			return 1
+		}else{
+			const cost = Math.sqrt( 1 - sint*sint )
+			cosi = Math.abs(cosi)
+			const rs = (etat*cosi - etai*cost) / (etat*cosi + etai*cost)
+			const rp = (etai*cosi - etat*cost) / (etai*cosi + etat*cost)
+			return (rs*rs + rp*rp) / 2
+		}
+	}
+	
 	bounce( ray ){
-		const colour = Colour.multiply( ray.colour, ray.to.object.colour, ray.colour.a ) // Only for ray visualising
+		let colour = Colour.multiply( ray.colour, ray.to.object.colour, ray.colour.a ) // Only for ray visualising
 		let dir
 		
-		const fresnel = 1 + ray.dir.dot(ray.to.normal)
-		
-		// TODO: use proprer measure of reflectance vs transmittance
-		if( Math.random() < fresnel ){
+		if( Math.random() < this.fresnel(ray) ){
 			dir = this.specular(ray)
 		}else if( Math.random() < this.transparency ){
 			dir = this.transmit(ray)
