@@ -9,7 +9,7 @@ function createScene( canvasElement ){
 	
 	let x = Math.random() * (width-300) + 150
 	let y = Math.random() * (height-300) + 150
-	scene.push( new Circle( x, y, 50, Colour.WHITE, Material.transparent ) )
+	scene.push( new Circle( x, y, 50, Colour.WHITE, Material.matte ) )
 	
 	x = Math.random() * (width-300) + 150
 	y = Math.random() * (height-300) + 150
