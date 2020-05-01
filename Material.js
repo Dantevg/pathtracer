@@ -21,6 +21,7 @@ class Material {
 	
 	transmit( ray ){
 		// https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
+		// const n = ray.ior / ((ray.dir.dot(ray.to.normal) < 0) ? this.refraction : 1) // TODO: Is this right for outgoing rays?
 		const n = ray.ior/this.refraction
 		const c1 = ray.to.normal.dot( ray.dir )
 		const c2 = Math.sqrt( 1 - n*n * (1-c1*c1) )
@@ -32,13 +33,15 @@ class Material {
 		const colour = Colour.multiply( ray.colour, ray.to.object.colour, ray.colour.a ) // Only for ray visualising
 		let dir
 		
+		const fresnel = 1 + ray.dir.dot(ray.to.normal)
+		
 		// TODO: use proprer measure of reflectance vs transmittance
-		if( Math.random() < this.transparency ){
-			dir = this.transmit(ray)
-		}else if( Math.random() < this.roughness ){
-			dir = this.diffuse(ray)
-		}else{
+		if( Math.random() < fresnel ){
 			dir = this.specular(ray)
+		}else if( Math.random() < this.transparency ){
+			dir = this.transmit(ray)
+		}else{
+			dir = this.diffuse(ray)
 		}
 		return new Ray( Vector.add( ray.to.point, Vector.multiply(dir, 0.001) ), dir, ray.depth-1, colour )
 	}
