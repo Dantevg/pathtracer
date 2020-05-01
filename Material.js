@@ -58,7 +58,7 @@ class Material {
 		}else{
 			dir = this.diffuse(ray)
 		}
-		return new Ray( Vector.add( ray.to.point, Vector.multiply(dir, 0.001) ), dir, ray.depth-1, colour )
+		return new Ray( Vector.add( ray.to.point, Vector.multiply(dir, 0.001) ), dir, ray.depth-1, colour, this.refraction )
 	}
 	
 	// Some default materials
