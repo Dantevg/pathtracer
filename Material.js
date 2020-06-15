@@ -21,17 +21,25 @@ class Material {
 	
 	transmit( ray ){
 		// https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
-		// const n = ray.ior / ((ray.dir.dot(ray.to.normal) < 0) ? this.refraction : 1) // TODO: Is this right for outgoing rays?
-		const n = ray.ior/this.refraction
-		const c1 = ray.to.normal.dot( ray.dir )
+		// const n = ((ray.dir.dot(ray.to.normal) < 0) ? ray.ior : 1) / this.refraction
+		let N = Vector.clone( ray.to.normal )
+		let c1 = ray.to.normal.dot( ray.dir )
+		
+		if( c1 < 0 ){ // Ray incoming
+			c1 = -c1
+			var n = 1 / this.refraction
+		}else{ // Ray outgoing
+			N = Vector.multiply( N, -1 );
+			var n = this.refraction / 1
+		}
 		const c2 = Math.sqrt( 1 - n*n * (1-c1*c1) )
-		const dir = Vector.multiply( ray.dir, n ).add( Vector.multiply( ray.to.normal, n*c1 - c2 ) )
+		const dir = Vector.multiply( ray.dir, n ).add( Vector.multiply( N, n*c1 - c2 ) )
 		return dir
 	}
 	
 	fresnel( ray ){
 		let cosi = Math.min( Math.max( -1, ray.dir.dot(ray.to.normal) ), 1 )
-		let etai = ray.ior
+		let etai = 1
 		let etat = this.refraction
 		if( cosi > 0 ) [etai, etat] = [etat, etai]
 		
@@ -58,7 +66,7 @@ class Material {
 		}else{
 			dir = this.diffuse(ray)
 		}
-		return new Ray( Vector.add( ray.to.point, Vector.multiply(dir, 0.001) ), dir, ray.depth-1, colour, this.refraction )
+		return new Ray( Vector.add( ray.to.point, Vector.multiply(dir, 0.001) ), dir, ray.depth-1, colour )
 	}
 	
 	// Some default materials
