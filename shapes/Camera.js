@@ -1,11 +1,12 @@
 class Camera extends Line {
-	constructor( x, y, angle, res, sensitivity = 1 ){
+	constructor( x, y, angle, w, h, sensitivity = 1 ){
 		const dir = new Vector( -Math.sin(angle), Math.cos(angle) )
 		super( x-dir.x*10, y-dir.y*10, x+dir.x*10, y+dir.y*10, Colour.WHITE, new Null() )
 		this.pos = new Vector( x, y )
 		this.dir = dir
 		this.angle = angle
-		this.res = res
+		this.w = w
+		this.h = h
 		this.sensitivity = sensitivity
 		this.init()
 	}
@@ -17,9 +18,16 @@ class Camera extends Line {
 		this.b.set( this.pos.x + this.dir.x*10, this.pos.y + this.dir.y*10 )
 		this.iterations = 0
 		this.canvas = []
-		for( let i = 0; i < this.res; i++ ){
-			this.canvas[i] = Colour.BLACK
+		for( let x = 0; x < this.w; x++ ){
+			this.canvas[x] = []
+			for( let y = 0; y < this.h; y++ ){
+				this.canvas[x][y] = Colour.BLACK
+			}
 		}
+		
+		// for( let i = 0; i < this.w; i++ ){
+		// 	this.canvas[i] = Colour.BLACK
+		// }
 	}
 	
 	getIntersection(){
@@ -39,15 +47,16 @@ class Camera extends Line {
 		const vec = this.getVector()
 		const dir = this.getNormal()
 		
-		for( let i = 0; i < this.res; i++ ){
-			const offset = i / this.res
+		for( let x = 0; x < this.w; x++ ){
+			const offset = x / this.w
 			const pos = new Vector( this.a.x + vec.x*offset, this.a.y + vec.y*offset )
 			
-			const angle = mod( dir.toAngles() + (i/this.res-0.5)*flags.fov/180*Math.PI, Math.PI*2 )
+			const angle = mod( dir.toAngles() + (x/this.w-0.5)*flags.fov/180*Math.PI, Math.PI*2 )
 			const ray = new Ray( pos, angle, flags.nBounces, this.colour )
 			
-			// const progress = Math.floor( Vector.distSq(this.a, pos) / this.distSq * this.res )
-			this.canvas[i].add( ray.cast( scene ), true )
+			// const progress = Math.floor( Vector.distSq(this.a, pos) / this.distSq * this.w )
+			let y = Math.floor( Math.random()*this.h )
+			this.canvas[x][y].add( ray.cast( scene ), true )
 			if( flags.drawRays ) ray.drawLine( canvas )
 			if( flags.drawRayHits ) ray.drawPoint( canvas )
 		}
@@ -55,10 +64,12 @@ class Camera extends Line {
 	}
 	
 	drawCanvas( canvas, height ){
-		for( let i = 0; i < this.res; i++ ){
-			const colour = Colour.multiply( this.canvas[i], new Colour(1/this.iterations) )
-			canvas.fillStyle = colour.multiply( new Colour(this.sensitivity) ).setAlpha(1).toString()
-			canvas.fillRect( i, height-50, 1, 50 )
+		for( let x = 0; x < this.w; x++ ){
+			for( let y = 0; y < this.h; y++ ){
+				const colour = Colour.multiply( this.canvas[x][y], new Colour(1/this.iterations*this.h) )
+				canvas.fillStyle = colour.multiply( new Colour(this.sensitivity) ).setAlpha(1).toString()
+				canvas.fillRect( x, height-y, 1, 1 )
+			}
 		}
 	}
 	

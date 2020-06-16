@@ -90,7 +90,7 @@ function main(){
 	// Build scene
 	scene = createScene( canvasElement )
 	
-	camera = scene[ scene.push( new Camera( 200, 200, 0, 1000 ) ) - 1 ]
+	camera = scene[ scene.push( new Camera( 200, 200, 0, 1000, 10 ) ) - 1 ]
 	
 	const raytracer = new Raytracer( canvasElement, scene )
 	
