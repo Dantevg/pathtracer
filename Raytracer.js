@@ -4,8 +4,9 @@
 // Path tracing - multiple rays per pixel, bounce like physics, not real time (rendering)
 
 class Raytracer {
-	constructor( cvs, scene ){
+	constructor( cvs, cameracvs, scene ){
 		this.canvas = cvs.getContext("2d")
+		this.cameraCanvas = cameracvs.getContext("2d")
 		this.width = cvs.width
 		this.height = cvs.height
 		this.scene = scene
@@ -22,6 +23,9 @@ class Raytracer {
 		// Clear canvas
 		this.canvas.fillStyle = "#000000"
 		this.canvas.fillRect( 0, 0, this.width, this.height )
+		
+		this.cameraCanvas.fillStyle = "#000000"
+		this.cameraCanvas.fillRect( 0, 0, this.width, this.height )
 	}
 	
 	draw( timestamp ){
@@ -65,7 +69,7 @@ class Raytracer {
 		// }
 		
 		// Draw camera vision
-		camera.drawCanvas( this.canvas, this.height )
+		camera.drawCanvas( this.cameraCanvas )
 		
 		// Print settings
 		this.canvas.fillStyle = "#000000"
