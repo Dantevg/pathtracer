@@ -27,7 +27,10 @@ console.log("h:     Toggle ray hits")
 function main(){
 	const canvasElement = document.getElementById("canvas")
 	canvasElement.width = window.innerWidth
-	canvasElement.height = window.innerHeight
+	canvasElement.height = window.innerHeight-50
+	const cameraCanvasElement = document.getElementById("camera")
+	cameraCanvasElement.width = window.innerWidth
+	cameraCanvasElement.height = 50
 	
 	// Set event listeners
 	canvasElement.addEventListener( "mousemove", e => mouse.set( e.x, e.y ) )
@@ -90,9 +93,9 @@ function main(){
 	// Build scene
 	scene = createScene( canvasElement )
 	
-	camera = scene[ scene.push( new Camera( 200, 200, 0, 1000 ) ) - 1 ]
+	camera = scene[ scene.push( new Camera( 200, 200, 0, 1000, 25 ) ) - 1 ]
 	
-	const raytracer = new Raytracer( canvasElement, scene )
+	const raytracer = new Raytracer( canvasElement, cameraCanvasElement, scene )
 	
 	// Start draw loop
 	raytracer.draw()
