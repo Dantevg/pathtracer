@@ -93,7 +93,8 @@ function main(){
 	// Build scene
 	scene = createScene( canvasElement )
 	
-	camera = scene[ scene.push( new Camera( 200, 200, 0, 1000, 25 ) ) - 1 ]
+	camera = new Camera( 200, 200, 0, 1000, 25 )
+	scene.push(camera)
 	
 	const pathtracer = new Pathtracer( canvasElement, cameraCanvasElement, scene )
 	
