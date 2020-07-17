@@ -17,7 +17,7 @@ function createScene( canvasElement ){
 	
 	scene.push( new Circle( randomX(), randomY(), r, Colour.WHITE, Material.matte ) )
 	scene.push( new Circle( randomX(), randomY(), r, Colour.WHITE, Material.transparent ) )
-	scene.push( new Polygon( randomX(), randomY(), r, 3, Math.PI/6, Colour.WHITE, Material.transparent ) )
+	scene.push( new RegularPolygon( randomX(), randomY(), r, 3, Math.PI/6, Colour.WHITE, Material.transparent ) )
 	scene.push( new Rect( randomX(), randomY(), r, r*8, Colour.WHITE, Material.transparent ) )
 	
 	return scene
