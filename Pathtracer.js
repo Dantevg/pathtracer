@@ -1,9 +1,8 @@
-// To be precise, not really a ray tracer, but a path tracer:
 // Ray casting - 1 ray per pixel, no bounces, real time (wolfenstein 3D)
 // Ray tracing - 1 ray per pixel, bounce towards point light source, not real time
 // Path tracing - multiple rays per pixel, bounce like physics, not real time (rendering)
 
-class Raytracer {
+class Pathtracer {
 	constructor( cvs, cameracvs, scene ){
 		this.canvas = cvs.getContext("2d")
 		this.cameraCanvas = cameracvs.getContext("2d")

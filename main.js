@@ -47,28 +47,28 @@ function main(){
 		}else{
 			if( e.key == "n" ){
 				flags.drawNormals = !flags.drawNormals
-				raytracer.init()
+				pathtracer.init()
 			}else if( e.key == "f" ){
 				flags.drawObjectFills = !flags.drawObjectFills
-				raytracer.init()
+				pathtracer.init()
 			}else if( e.key == "l" ){
 				flags.drawObjectBorders = !flags.drawObjectBorders
-				raytracer.init()
+				pathtracer.init()
 			}else if( e.key == "r" ){
 				flags.drawRays = !flags.drawRays
-				raytracer.init()
+				pathtracer.init()
 			}else if( e.key == "h" ){
 				flags.drawRayHits = !flags.drawRayHits
-				raytracer.init()
+				pathtracer.init()
 			}else if( e.key == "c" ){
 				flags.selectedRandomColour = !flags.selectedRandomColour
 			}else if( e.key == "ArrowUp" ){
 				flags.nBounces++
-				raytracer.init()
+				pathtracer.init()
 				camera.init()
 			}else if( e.key == "ArrowDown" ){
 				flags.nBounces = Math.max( --flags.nBounces, 0 )
-				raytracer.init()
+				pathtracer.init()
 				camera.init()
 			}
 		}
@@ -87,7 +87,7 @@ function main(){
 				}
 			}
 		}
-		raytracer.init()
+		pathtracer.init()
 	} )
 	
 	// Build scene
@@ -95,10 +95,10 @@ function main(){
 	
 	camera = scene[ scene.push( new Camera( 200, 200, 0, 1000, 25 ) ) - 1 ]
 	
-	const raytracer = new Raytracer( canvasElement, cameraCanvasElement, scene )
+	const pathtracer = new Pathtracer( canvasElement, cameraCanvasElement, scene )
 	
 	// Start draw loop
-	raytracer.draw()
+	pathtracer.draw()
 }
 
 // Fix JavaScript's modulo function
