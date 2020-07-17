@@ -1,6 +1,6 @@
-class Square extends RegularPolygon {
+class Square extends Rect {
 	constructor( x, y, size, colour, material ){
-		super( x - size/2, y - size/2, size/2, 4, colour, material )
+		super( x, y, size, size, colour, material )
 	}
 	
 }
