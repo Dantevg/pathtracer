@@ -1,19 +1,15 @@
 class Polygon {
-	constructor( x, y, r, nSides, angle, colour, material ){
-		this.x = x
-		this.y = y
-		this.r = r
-		this.nSides = nSides
-		this.angle = angle
+	constructor( points, colour, material ){
+		this.points = points
 		this.colour = colour
 		this.material = material
 		
 		this.sides = []
-		for( let i = 0; i < this.nSides; i++ ){
-			const x1 = this.x + this.r * Math.cos( i*Math.PI*2/this.nSides + this.angle )
-			const y1 = this.y + this.r * Math.sin( i*Math.PI*2/this.nSides + this.angle )
-			const x2 = this.x + this.r * Math.cos( (i+1)*Math.PI*2/this.nSides + this.angle )
-			const y2 = this.y + this.r * Math.sin( (i+1)*Math.PI*2/this.nSides + this.angle )
+		for( let i = 0; i < this.points.length; i++ ){
+			const x1 = this.points[i][0]
+			const y1 = this.points[i][1]
+			const x2 = this.points[(i+1) % this.points.length][0]
+			const y2 = this.points[(i+1) % this.points.length][1]
 			this.sides.push( new Line( x1, y1, x2, y2, this.colour, this.material ) )
 		}
 	}
