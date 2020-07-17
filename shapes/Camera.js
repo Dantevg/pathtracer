@@ -52,7 +52,8 @@ class Camera extends Line {
 			const pos = new Vector( this.a.x + vec.x*offset, this.a.y + vec.y*offset )
 			
 			const angle = mod( dir.toAngles() + (x/this.w-0.5)*flags.fov/180*Math.PI, Math.PI*2 )
-			const ray = new Ray( pos, angle, flags.nBounces, this.colour )
+			const rayDir = new Vector( Math.cos(angle), Math.sin(angle) )
+			const ray = new Ray( pos, rayDir, flags.nBounces, this.colour )
 			
 			// const progress = Math.floor( Vector.distSq(this.a, pos) / this.distSq * this.w )
 			let y = Math.floor( Math.random()*this.h )

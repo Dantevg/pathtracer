@@ -1,14 +1,7 @@
 class Ray {
-	constructor( pos, angle, parentOrDepth, colour ){
+	constructor( pos, dir, parentOrDepth, colour ){
 		this.pos = pos
-		
-		if( typeof angle == "number" ){ // Angle given
-			this.angle = angle
-			this.dir = new Vector( Math.cos(this.angle), Math.sin(this.angle) )
-		}else{ // Direction vector given
-			this.angle = angle.toAngles()
-			this.dir = angle
-		}
+		this.dir = dir
 		
 		if( parentOrDepth instanceof Ray ){
 			this.parent = parentOrDepth
@@ -24,7 +17,7 @@ class Ray {
 	cast( scene ){
 		// Max depth reached
 		if( this.depth < 0 ){
-			return Colour.TRANSPARENT
+			return Colour.WHITE
 		}
 		
 		this.to = {distSq: Infinity}
@@ -45,12 +38,6 @@ class Ray {
 		
 		// No object in path or no continuing ray, don't draw
 		return Colour.TRANSPARENT
-	}
-	
-	lookAt( x, y ){
-		this.dir.x = x - this.pos.x
-		this.dir.y = y - this.pos.y
-		this.dir.normalize()
 	}
 	
 	drawPoint( canvas ){

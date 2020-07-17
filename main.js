@@ -27,10 +27,10 @@ console.log("h:     Toggle ray hits")
 function main(){
 	const canvasElement = document.getElementById("canvas")
 	canvasElement.width = window.innerWidth
-	canvasElement.height = window.innerHeight-50
+	canvasElement.height = window.innerHeight-100
 	const cameraCanvasElement = document.getElementById("camera")
 	cameraCanvasElement.width = window.innerWidth
-	cameraCanvasElement.height = 50
+	cameraCanvasElement.height = 100
 	
 	// Set event listeners
 	canvasElement.addEventListener( "mousemove", e => mouse.set( e.x, e.y ) )
@@ -93,7 +93,8 @@ function main(){
 	// Build scene
 	scene = createScene( canvasElement )
 	
-	camera = new Camera( 200, 200, 0, 1000, 25 )
+	// camera = new Camera( 200, 200, 0, 1000, 25 )
+	camera = new Camera3D( new Vector(200, 200, 0), new Vector(1,0,0), new Vector(0,1,0), 20, 20, 100, 100 )
 	scene.push(camera)
 	
 	const pathtracer = new Pathtracer( canvasElement, cameraCanvasElement, scene )

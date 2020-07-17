@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <head>
 	<title>Path tracing</title>
+	
+	<!-- Libraries -->
 	<script src="lib/Vector.js"></script>
 	<script src="lib/Colour.js"></script>
+	
+	<!-- 2D Shapes -->
 	<script src="shapes/Line.js"></script>
 	<script src="shapes/Polygon.js"></script>
 	<script src="shapes/RegularPolygon.js"></script>
@@ -10,9 +14,20 @@
 	<script src="shapes/Square.js"></script>
 	<script src="shapes/Circle.js"></script>
 	<script src="shapes/Camera.js"></script>
+	
+	<!-- 3D Shapes -->
+	<script src="shapes/Plane.js"></script>
+	<script src="shapes/Sphere.js"></script>
+	<script src="shapes/Camera3D.js"></script>
+	
+	<!-- Materials -->
 	<script src="Material.js"></script>
 	<script src="materials/Null.js"></script>
-	<script src="scenes/cornellBox.js"></script>
+	
+	<!-- Scene -->
+	<script src="scenes/cornellBox3D.js"></script>
+	
+	<!-- Main files -->
 	<script src="Ray.js"></script>
 	<script src="Pathtracer.js"></script>
 	<script src="main.js"></script>
@@ -27,7 +42,7 @@
 	</style>
 </head>
 <body onload="main()" oncontextmenu="return false">
-	<canvas id="canvas" width=600 height=400></canvas>
-	<canvas id="camera" width=600 height=50></canvas>
+	<canvas id="canvas"></canvas>
+	<canvas id="camera"></canvas>
 </body>
 </html>
