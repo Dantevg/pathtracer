@@ -68,7 +68,7 @@ class Camera3D extends Plane {
 		const image = canvas.getImageData( 0, 0, canvas.canvas.width, canvas.canvas.height )
 		for( let x = 0; x < Math.min(this.width, image.width); x++ ){
 			for( let y = 0; y < Math.min(this.height, image.height); y++ ){
-				const colour = Colour.multiply( this.buffer[x][y], new Colour(1/this.iterations*this.height) )
+				const colour = Colour.multiply( this.buffer[x][y], new Colour(1/this.iterations) )
 				let rgb = colour.multiply( new Colour(this.sensitivity) ).setAlpha(1).rgb255
 				Camera.setImagePixel( image, x, y, rgb )
 			}
