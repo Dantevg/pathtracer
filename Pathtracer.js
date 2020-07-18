@@ -3,11 +3,11 @@
 // Path tracing - multiple rays per pixel, bounce like physics, not real time (rendering)
 
 class Pathtracer {
-	constructor( cvs, cameracvs, scene ){
-		this.canvas = cvs.getContext("2d")
+	constructor( previewcvs, cameracvs, scene ){
+		this.previewCanvas = previewcvs.getContext("2d")
 		this.cameraCanvas = cameracvs.getContext("2d")
-		this.width = cvs.width
-		this.height = cvs.height
+		this.width = previewcvs.width
+		this.height = previewcvs.height
 		this.scene = scene
 		this.pos = new Vector( this.width/2, this.height/2 )
 		this.angle = 0
@@ -20,8 +20,8 @@ class Pathtracer {
 		this.ray = new Ray( this.pos, 0, flags.nBounces, Colour.WHITE )
 		
 		// Clear canvas
-		this.canvas.fillStyle = "#000000"
-		this.canvas.fillRect( 0, 0, this.width, this.height )
+		this.previewCanvas.fillStyle = "#000000"
+		this.previewCanvas.fillRect( 0, 0, this.width, this.height )
 		
 		this.cameraCanvas.fillStyle = "#000000"
 		this.cameraCanvas.fillRect( 0, 0, this.width, this.height )
@@ -48,12 +48,14 @@ class Pathtracer {
 		}
 		
 		// Background
-		this.canvas.fillStyle = "rgba(0,0,0,0.1)"
-		this.canvas.fillRect( 0, 0, this.width, this.height-49 )
+		this.previewCanvas.fillStyle = "rgba(0,0,0,0.1)"
+		this.previewCanvas.fillRect( 0, 0, this.width, this.height-49 )
 		
 		// Objects
 		for( const object of this.scene ){
-			object.draw( this.canvas, this.scene )
+			this.previewCanvas.translate(500, 0)
+			object.draw( this.previewCanvas, this.scene )
+			this.previewCanvas.translate(-500, -0)
 		}
 		
 		// Cast rays from mouse
@@ -63,29 +65,29 @@ class Pathtracer {
 		// 	this.ray.dir.set( Math.cos(this.ray.angle), Math.sin(this.ray.angle) )
 			
 		// 	this.ray.cast( this.scene )
-		// 	if( flags.drawRays ) this.ray.drawLine( this.canvas )
-		// 	if( flags.drawRayHits ) this.ray.drawPoint( this.canvas )
+		// 	if( flags.drawRays ) this.ray.drawLine( this.previewCanvas )
+		// 	if( flags.drawRayHits ) this.ray.drawPoint( this.previewCanvas )
 		// }
 		
 		// Draw camera vision
 		camera.drawCanvas( this.cameraCanvas )
 		
 		// Print settings
-		this.canvas.fillStyle = "#000000"
-		this.canvas.fillRect( 0, 0, 180, 190 )
-		this.canvas.font = "10px monospace"
-		this.canvas.fillStyle = "#FFFFFF"
-		this.canvas.fillText( Math.round(this.fps), 10, 15 )
+		this.previewCanvas.fillStyle = "#000000"
+		this.previewCanvas.fillRect( 0, 0, 180, 190 )
+		this.previewCanvas.font = "10px monospace"
+		this.previewCanvas.fillStyle = "#FFFFFF"
+		this.previewCanvas.fillText( Math.round(this.fps), 10, 15 )
 		let i = 2
 		for( const flag in flags ){
 			if( typeof flags[flag] == "object" ){
 				continue
 			}
-			this.canvas.fillStyle = "#FFFFFF"
+			this.previewCanvas.fillStyle = "#FFFFFF"
 			if( typeof flags[flag] == "boolean" ){
-				this.canvas.fillStyle = flags[flag] ? "#44FF44" : "#FF4444"
+				this.previewCanvas.fillStyle = flags[flag] ? "#44FF44" : "#FF4444"
 			}
-			this.canvas.fillText( flag + ": " + flags[flag], 10, 15*i )
+			this.previewCanvas.fillText( flag + ": " + flags[flag], 10, 15*i )
 			i++
 		}
 		

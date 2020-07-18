@@ -25,15 +25,15 @@ console.log("r:     Toggle rays")
 console.log("h:     Toggle ray hits")
 
 function main(){
-	const canvasElement = document.getElementById("canvas")
-	canvasElement.width = window.innerWidth
-	canvasElement.height = window.innerHeight-100
+	const previewCanvasElement = document.getElementById("preview")
+	previewCanvasElement.width = window.innerWidth
+	previewCanvasElement.height = window.innerHeight-300
 	const cameraCanvasElement = document.getElementById("camera")
 	cameraCanvasElement.width = window.innerWidth
-	cameraCanvasElement.height = 100
+	cameraCanvasElement.height = 300
 	
 	// Set event listeners
-	canvasElement.addEventListener( "mousemove", e => mouse.set( e.x, e.y ) )
+	previewCanvasElement.addEventListener( "mousemove", e => mouse.set( e.x, e.y ) )
 	document.addEventListener( "keydown", e => {
 		keys[e.key] = true
 		if( e.shiftKey ){
@@ -91,13 +91,13 @@ function main(){
 	} )
 	
 	// Build scene
-	scene = createScene( canvasElement )
+	scene = createScene( previewCanvasElement )
 	
 	// camera = new Camera( 200, 200, 0, 1000, 25 )
 	camera = new Camera3D( new Vector(0, 0, 128), new Vector(1,0,0), new Vector(0,0,1), 20, 20, 100, 100, 1 )
 	scene.push(camera)
 	
-	const pathtracer = new Pathtracer( canvasElement, cameraCanvasElement, scene )
+	const pathtracer = new Pathtracer( previewCanvasElement, cameraCanvasElement, scene )
 	
 	// Start draw loop
 	pathtracer.draw()
