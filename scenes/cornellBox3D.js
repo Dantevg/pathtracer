@@ -13,9 +13,18 @@ function createScene( canvasElement ){
 	const [x1, y1, z1, x2, y2, z2] = [200, 0, 0, canvasElement.width-200, canvasElement.height-50, 500]
 	const r = 50
 	
-	scene.push( new Sphere( new Vector(500, 300, 0), 50, Colour.WHITE, Material.matte ) )
-	scene.push( new Plane( new Vector(500, 100, 0), new Vector(1,0,0), new Vector(0,0,1), 100, 100, Colour.WHITE, Material.matte ) )
-	scene.push( new Sphere( new Vector(500, 500, 0), 50, Colour.WHITE, Material.emissive ) )
+	// Ceiling
+	scene.push( new Plane( new Vector(128, 128, 0), new Vector(1,0,0), new Vector(0,1,0), 256, 256, Colour.WHITE, Material.emissive ) )
+	// Floor
+	scene.push( new Plane( new Vector(128, 128, 256), new Vector(1,0,0), new Vector(0,-1,0), 256, 256, Colour.WHITE, Material.matte ) )
+	// Back wall
+	scene.push( new Plane( new Vector(128, 0, 128), new Vector(1,0,0), new Vector(0,0,1), 256, 256, Colour.WHITE, Material.matte ) )
+	// Left wall
+	scene.push( new Plane( new Vector(0, 128, 128), new Vector(0,1,0), new Vector(0,0,1), 256, 256, Colour.RED, Material.matte ) )
+	// Right wall
+	scene.push( new Plane( new Vector(256, 128, 128), new Vector(0,-1,0), new Vector(0,0,1), 256, 256, Colour.GREEN, Material.matte ) )
+	
+	scene.push( new Sphere( new Vector(128, 128, 200), 50, Colour.WHITE, Material.matte ) )
 	
 	return scene
 }
