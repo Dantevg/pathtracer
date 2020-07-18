@@ -1,8 +1,8 @@
 class Plane {
 	constructor( pos, u, v, w, h, colour, material ){
 		this.pos = pos
-		this.u = u
-		this.v = v
+		this.u = u.normalize()
+		this.v = v.normalize()
 		this.w = w
 		this.h = h
 		this.colour = colour
@@ -12,7 +12,7 @@ class Plane {
 	getIntersection( ray ){
 		const normal = this.getNormal()
 		const denominator = normal.dot(ray.dir)
-		if( denominator < Number.EPSILON ) return false // Parallel
+		if( Math.abs(denominator) < Number.EPSILON ) return false // Parallel
 		
 		const t = normal.dot( Vector.subtract( this.pos, ray.pos ) ) / denominator
 		if( t < 0 ) return false // Behind ray
