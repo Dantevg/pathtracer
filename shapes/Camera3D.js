@@ -1,6 +1,6 @@
 class Camera3D extends Plane {
 	constructor( pos, u, v, wPlane, hPlane, wRes, hRes, sensitivity = 1 ){
-		super( pos, u.multiply(wPlane), v.multiply(hPlane), wPlane, hPlane, Colour.WHITE, new Null() )
+		super( pos, u, v, wPlane, hPlane, Colour.WHITE, new Null() )
 		// this.yaw = Math.atan( dir.y / dir.x )
 		// this.pitch = Math.atan( dir.z / dir.y ) // TODO: check
 		this.width = wRes
@@ -13,8 +13,8 @@ class Camera3D extends Plane {
 		// this.dir = Vector.fromAngles3D( this.yaw, this.pitch )
 		
 		// Top-left corner
-		const horizontal = Vector.multiply( this.u, 0.5 )
-		const vertical = Vector.multiply( this.v, 0.5 )
+		const horizontal = Vector.multiply( this.u, 0.5*this.w )
+		const vertical = Vector.multiply( this.v, 0.5*this.h )
 		this.a = Vector.subtract( this.pos, horizontal ).subtract( vertical )
 		this.normal = this.getNormal()
 		this.focusPoint = Vector.multiply( this.normal, -this.w ).add( this.pos )
@@ -44,8 +44,8 @@ class Camera3D extends Plane {
 		
 		for( let x = 0; x < this.width; x++ ){
 			for( let y = 0; y < this.height; y++ ){
-				const ox = x / this.width
-				const oy = y / this.height
+				const ox = x / this.width * this.w
+				const oy = y / this.height * this.h
 				
 				const pos = this.a.clone().add( Vector.multiply(this.u, ox) ).add( Vector.multiply(this.v, oy) )
 				const dir = Vector.subtract( pos, this.focusPoint ).normalize()

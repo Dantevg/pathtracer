@@ -12,7 +12,7 @@ class Material {
 	}
 	
 	diffuse( ray ){
-		const dir = Vector.random2DAngle()
+		const dir = Vector.random3DAngles()
 		
 		// Ensure ray goes in right direction
 		dir.multiply( -Math.sign( ray.dir.dot( ray.to.normal ) * dir.dot( ray.to.normal ) ) )
