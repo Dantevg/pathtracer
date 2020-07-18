@@ -17,7 +17,7 @@ class Ray {
 	cast( scene ){
 		// Max depth reached
 		if( this.depth < 0 ){
-			return Colour.WHITE
+			return Colour.TRANSPARENT
 		}
 		
 		this.to = {distSq: Infinity}
