@@ -17,7 +17,7 @@ class Pathtracer {
 	}
 	
 	init(){
-		this.ray = new Ray( this.pos, 0, flags.nBounces, Colour.WHITE )
+		// this.ray = new Ray( this.pos, 0, flags.nBounces, Colour.WHITE )
 		
 		// Clear canvas
 		this.previewCanvas.fillStyle = "#000000"
@@ -31,9 +31,30 @@ class Pathtracer {
 		this.fps = 1 / (timestamp - this.lastframe) * 1000
 		this.lastframe = timestamp
 		
-		if( this.pos.x != mouse.x || this.pos.y != mouse.y ){
+		if( keys.mouse && (this.pos.x != mouse.x || this.pos.y != mouse.y) ){
 			this.pos.set( mouse.x, mouse.y ) // Set light source on mouse position
 			this.init()
+		}
+		
+		if( keys.w ){
+			camera.pos.y += 10
+			this.init()
+			camera.init()
+		}
+		if( keys.a ){
+			camera.pos.x -= 10
+			this.init()
+			camera.init()
+		}
+		if( keys.s ){
+			camera.pos.y -= 10
+			this.init()
+			camera.init()
+		}
+		if( keys.d ){
+			camera.pos.x += 10
+			this.init()
+			camera.init()
 		}
 		
 		// Set single ray direction
@@ -52,11 +73,13 @@ class Pathtracer {
 		this.previewCanvas.fillRect( 0, 0, this.width, this.height-49 )
 		
 		// Objects
+		this.previewCanvas.save()
+		this.previewCanvas.translate( previewOffsetX, previewOffsetY )
+		this.previewCanvas.scale( 1, -1 )
 		for( const object of this.scene ){
-			this.previewCanvas.translate(500, 0)
 			object.draw( this.previewCanvas, this.scene )
-			this.previewCanvas.translate(-500, -0)
 		}
+		this.previewCanvas.restore()
 		
 		// Cast rays from mouse
 		// for( let i = 0; i < flags.nRays; i++ ){

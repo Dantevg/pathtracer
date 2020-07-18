@@ -34,7 +34,7 @@ class Camera3D extends Plane {
 	}
 	
 	draw( canvas, scene ){
-		if( mouse.x != this.pos.x || mouse.y != this.pos.y ){
+		if( keys.mouse && (mouse.x != this.pos.x || mouse.y != this.pos.y) ){
 			this.pos.set( mouse.x, mouse.y, this.pos.z )
 			this.init()
 		}
@@ -52,7 +52,6 @@ class Camera3D extends Plane {
 				const ray = new Ray( pos, dir, flags.nBounces, this.colour )
 				
 				this.buffer[x][y].add( ray.cast( scene ), true )
-				if( keys.d ) console.log(ray)
 				if( flags.drawRays ) ray.drawLine( canvas )
 				if( flags.drawRayHits ) ray.drawPoint( canvas )
 			}

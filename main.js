@@ -32,8 +32,11 @@ function main(){
 	cameraCanvasElement.width = window.innerWidth
 	cameraCanvasElement.height = 300
 	
+	previewOffsetX = previewCanvasElement.width/2
+	previewOffsetY = 200
+	
 	// Set event listeners
-	previewCanvasElement.addEventListener( "mousemove", e => mouse.set( e.x, e.y ) )
+	previewCanvasElement.addEventListener( "mousemove", e => mouse.set( e.x-previewOffsetX, previewOffsetY-e.y ) )
 	document.addEventListener( "keydown", e => {
 		keys[e.key] = true
 		if( e.shiftKey ){
@@ -74,27 +77,29 @@ function main(){
 		}
 	} )
 	document.addEventListener( "keyup", e => keys[e.key] = false )
-	document.addEventListener( "mousedown", e => {
-		const x = Math.floor( e.x / flags.blockScale ) * flags.blockScale
-		const y = Math.floor( e.y / flags.blockScale ) * flags.blockScale
-		if( e.button == 0 ){ // Primary button, add block
-			const colour = flags.selectedRandomColour ? Colour.random() : Colour.WHITE
-			scene.push( new Rect( x, y, flags.blockScale, flags.blockScale, colour, flags.selected ) )
-		}else{ // Secondary button, remove block
-			for( const block in scene ){
-				if( scene[block].x == x && scene[block].y == y ){
-					scene.splice( block, 1 )
-				}
-			}
-		}
-		pathtracer.init()
-	} )
+	document.addEventListener( "mousedown", e => keys.mouse = true )
+	document.addEventListener( "mouseup", e => keys.mouse = false )
+	// document.addEventListener( "mousedown", e => {
+	// 	const x = Math.floor( e.x / flags.blockScale ) * flags.blockScale
+	// 	const y = Math.floor( e.y / flags.blockScale ) * flags.blockScale
+	// 	if( e.button == 0 ){ // Primary button, add block
+	// 		const colour = flags.selectedRandomColour ? Colour.random() : Colour.WHITE
+	// 		scene.push( new Rect( x, y, flags.blockScale, flags.blockScale, colour, flags.selected ) )
+	// 	}else{ // Secondary button, remove block
+	// 		for( const block in scene ){
+	// 			if( scene[block].x == x && scene[block].y == y ){
+	// 				scene.splice( block, 1 )
+	// 			}
+	// 		}
+	// 	}
+	// 	pathtracer.init()
+	// } )
 	
 	// Build scene
 	scene = createScene( previewCanvasElement )
 	
 	// camera = new Camera( 200, 200, 0, 1000, 25 )
-	camera = new Camera3D( new Vector(0, 0, 128), new Vector(1,0,0), new Vector(0,0,1), 20, 20, 100, 100, 1 )
+	camera = new Camera3D( new Vector(0, 0, 0), new Vector(1,0,0), new Vector(0,0,-1), 20, 20, 100, 100, 1 )
 	scene.push(camera)
 	
 	const pathtracer = new Pathtracer( previewCanvasElement, cameraCanvasElement, scene )
