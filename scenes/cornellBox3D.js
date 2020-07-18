@@ -13,7 +13,8 @@ function createScene( canvasElement ){
 	const [x1, y1, z1, x2, y2, z2] = [200, 0, 0, canvasElement.width-200, canvasElement.height-50, 500]
 	const r = 50
 	
-	scene.push( new Sphere( new Vector(500, 300, 200), 50, Colour.WHITE, Material.matte ) )
+	scene.push( new Sphere( new Vector(500, 300, 0), 50, Colour.WHITE, Material.matte ) )
+	scene.push( new Sphere( new Vector(500, 500, 0), 50, Colour.WHITE, Material.emissive ) )
 	
 	return scene
 }
