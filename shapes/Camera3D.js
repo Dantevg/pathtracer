@@ -49,10 +49,6 @@ class Camera3D extends Plane {
 				
 				const pos = this.a.clone().add( Vector.multiply(this.u, ox) ).add( Vector.multiply(this.v, oy) )
 				const dir = Vector.subtract( pos, this.focusPoint ).normalize()
-				// const theta = mod( this.normal.getTheta() + (x/this.width-0.5)*flags.fov/180*Math.PI, Math.PI*2 )
-				// const phi = mod( this.normal.getPhi() + (y/this.height-0.5)*flags.fov/180*Math.PI, Math.PI*2 )
-				// const ray = new Ray( pos, new Vector((x/this.width-0.5)*flags.fov/180*Math.PI, (y/this.height-0.5)*flags.fov/180*Math.PI, 1).normalize(), flags.nBounces, this.colour )
-				// const ray = new Ray( pos, this.normal, flags.nBounces, this.colour )
 				const ray = new Ray( pos, dir, flags.nBounces, this.colour )
 				
 				this.buffer[x][y].add( ray.cast( scene ), true )
