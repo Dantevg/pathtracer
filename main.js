@@ -66,7 +66,7 @@ renderElement.width = width
 renderElement.height = height
 const renderCanvas = renderElement.getContext("2d")
 
-const pathtracer = new Pathtracer(scene, width, height, 4)
+const pathtracer = new Pathtracer(scene, 200, 200, 4)
 
 scene.ox = previewElement.width/2
 scene.oy = 200
