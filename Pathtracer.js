@@ -26,7 +26,7 @@ export default class Pathtracer {
 	}
 	
 	// Issues all workers to render
-	render(result, all, nBounces = 0){
+	frame(result, all, nBounces = 0){
 		for( const worker of this.workers ){
 			// Initialize worker callback
 			worker.onmessage = function(e){
@@ -39,6 +39,33 @@ export default class Pathtracer {
 						all()
 					}
 					result()
+				}else if(e.data.type == "log"){
+					console.log("[Worker]", ...e.data.data)
+				}
+			}.bind(this)
+			
+			worker.postMessage({
+				type: "render",
+				nBounces: nBounces,
+			})
+			
+			this.running++
+		}
+	}
+	
+	render(canvas, scale, nBounces = 0){
+		for( const worker of this.workers ){
+			// Initialize worker callback
+			worker.onmessage = function(e){
+				if( e.data.type == "result" ){
+					console.log("Render result")
+					this.iterations++
+					worker.postMessage({
+						type: "render",
+						nBounces: nBounces,
+					})
+					this.result(e.data.data)
+					this.draw(canvas, scale)
 				}else if(e.data.type == "log"){
 					console.log("[Worker]", ...e.data.data)
 				}
