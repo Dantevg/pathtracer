@@ -35,10 +35,10 @@ export default class Pathtracer {
 					this.running--
 					this.iterations++
 					this.result(e.data.data)
-					result()
 					if(this.running == 0){
 						all()
 					}
+					result()
 				}else if(e.data.type == "log"){
 					console.log("[Worker]", ...e.data.data)
 				}
@@ -66,7 +66,7 @@ export default class Pathtracer {
 	// Draws buffer to canvas
 	draw(canvas, scale){
 		Canvas.draw(
-			this.buffer, canvas, this.width, this.height, 1,
+			this.buffer, canvas, this.width, this.height, scale,
 			(pixel) => Colour.multiply( pixel, new Colour(1/this.iterations) ).setAlpha(1).rgb255
 		)
 	}

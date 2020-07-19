@@ -3,7 +3,7 @@ import scene from "./scenes/cornellBox.js"
 
 // Constants and settings
 const width = 300
-const height = 200
+const height = 300
 
 const flags = {
 	drawObjectFills: false,
@@ -63,14 +63,12 @@ scene.oy = 200
 // Draw preview
 previewCanvas.fillStyle = "#000000"
 previewCanvas.fillRect(0, 0, previewElement.width, previewElement.height)
-console.log("Drawing preview")
 scene.preview(previewCanvas, flags)
 
-console.log("Drawing flags")
 drawFlags(previewCanvas)
 
 function render(){
-	pathtracer.render(() => pathtracer.draw(renderCanvas), () => requestAnimationFrame(render), flags.nBounces)
+	pathtracer.render(() => pathtracer.draw(renderCanvas, 1), () => requestAnimationFrame(render), flags.nBounces)
 }
 
 render()
