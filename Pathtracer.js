@@ -1,4 +1,5 @@
 import Colour from "./lib/Colour.js"
+import Canvas from "./lib/Canvas.js"
 
 export default class Pathtracer {
 	constructor(scene, width, height, nWorkers = 1){
@@ -63,36 +64,11 @@ export default class Pathtracer {
 	}
 	
 	// Draws buffer to canvas
-	draw(canvas){
-		const image = canvas.getImageData( 0, 0, this.width, this.height )
-		for( let x = 0; x < Math.min(this.width, image.width); x++ ){
-			for( let y = 0; y < Math.min(this.height, image.height); y++ ){
-				const colour = Colour.multiply( this.buffer[x][y], new Colour(1/this.iterations) )
-				let rgb = colour.setAlpha(1).rgb255
-				Pathtracer.setImagePixel(image, x, y, rgb)
-			}
-		}
-		canvas.putImageData(image, 0, 0)
-	}
-	
-	static getImagePixel(image, x, y, offset){
-		if(offset){
-			return image.data[ (x + y*image.width)*4 + offset ]
-		}else{
-			return [
-				getImagePixel(image, x, y, 0),
-				getImagePixel(image, x, y, 1),
-				getImagePixel(image, x, y, 2),
-				getImagePixel(image, x, y, 3),
-			]
-		}
-	}
-	
-	static setImagePixel(image, x, y, colour){
-		image.data[ (x + y*image.width)*4 + 0 ] = colour[0]
-		image.data[ (x + y*image.width)*4 + 1 ] = colour[1]
-		image.data[ (x + y*image.width)*4 + 2 ] = colour[2]
-		image.data[ (x + y*image.width)*4 + 3 ] = colour[3]
+	draw(canvas, scale){
+		Canvas.draw(
+			this.buffer, canvas, this.width, this.height, 1,
+			(pixel) => Colour.multiply( pixel, new Colour(1/this.iterations) ).setAlpha(1).rgb255
+		)
 	}
 	
 }
