@@ -65,7 +65,9 @@ export default class Pathtracer {
 	}
 	
 	render(canvas, scale, nBounces = 0, nIterations, onlyFinal){
-		const w = Math.floor(this.width/this.workers.length)
+		const rows = Pathtracer.findTiling(this.workers.length)
+		const w = Math.floor(this.width / this.workers.length * rows)
+		const h = Math.floor(this.height / rows)
 		for( let i = 0; i < this.workers.length; i++ ){
 			const worker = this.workers[i]
 			// Initialize worker callback
@@ -75,20 +77,20 @@ export default class Pathtracer {
 					this.iterations++
 					
 					// Restart worker if limit reached, or if no limit set
-					if( !nIterations || e.data.iterations < nIterations ){
-						this.startWorker(worker, nBounces, w*i, 0, w)
+					if(!nIterations || e.data.iterations < nIterations){
+						this.startWorker(worker, nBounces, w*Math.floor(i/rows), h*(i%rows), w, h)
 					}else{
 						this.running--
 					}
 					
 					// Add the data to the buffer
-					this.result(e.data.data, w*i, 0)
+					this.result(e.data.data, w*Math.floor(i/rows), h*(i%rows))
 					
 					// Draw the buffer to the canvas
-					if(onlyFinal && e.data.iterations >= nIterations){
-						this.draw(canvas, scale, e.data.iterations) // Do a full draw
+					if(onlyFinal && this.running == 0){
+						this.draw(canvas, scale, this.iterations/this.workers.length) // Do a full draw
 					}else if(!onlyFinal){
-						this.draw(canvas, scale, e.data.iterations, w*i, 0, w)
+						this.draw(canvas, scale, e.data.iterations, w*Math.floor(i/rows), h*(i%rows), w, h)
 					}
 				}else if(e.data.type == "log"){
 					console.log("[Worker]", ...e.data.data)
@@ -96,7 +98,7 @@ export default class Pathtracer {
 			}.bind(this)
 			
 			// Start worker
-			this.startWorker(worker, nBounces, w*i, 0, w)
+			this.startWorker(worker, nBounces, w*Math.floor(i/rows), h*(i%rows), w, h)
 			
 			this.running++
 		}
@@ -120,6 +122,14 @@ export default class Pathtracer {
 			(pixel) => Colour.multiply( pixel, weight ).rgb255,
 			scale, sx, sy, sw, sh
 		)
+	}
+	
+	static findTiling(n){
+		let rows = Math.floor( Math.sqrt(n) )
+		while( (n/rows) % 1 != 0 && rows > 1 ){
+			rows--
+		}
+		return rows
 	}
 	
 }
