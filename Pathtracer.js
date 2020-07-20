@@ -39,32 +39,6 @@ export default class Pathtracer {
 		})
 	}
 	
-	// Issues all workers to render
-	frame(result, all, nBounces = 0){
-		for( let i = 0; i < this.workers.length; i++ ){
-			const worker = this.workers[i]
-			// Initialize worker callback
-			worker.onmessage = function(e){
-				if( e.data.type == "result" ){
-					console.log("Render result")
-					this.running--
-					this.iterations++
-					this.result(e.data.data, 0, 0)
-					if(this.running == 0){
-						all()
-					}
-					result()
-				}else if(e.data.type == "log"){
-					console.log("[Worker]", ...e.data.data)
-				}
-			}.bind(this)
-			
-			this.startWorker(worker, nBounces)
-			
-			this.running++
-		}
-	}
-	
 	render(canvas, {scale, nBounces = 0, nIterations, batchSize = 1, onlyFinal}){
 		const rows = Pathtracer.findTiling(this.workers.length)
 		const w = Math.floor(this.width / this.workers.length * rows)

@@ -13,8 +13,9 @@ const flags = {
 	drawNormals: false,
 	fov: 60,
 	nBounces: 2,
-	nIterations: 16,
-	batchSize: 4,
+	nIterations: 8,
+	batchSize: 1,
+	nWorkers: 8,
 }
 
 let startTime = performance.now()
@@ -73,21 +74,12 @@ renderElement.width = width
 renderElement.height = height
 const renderCanvas = renderElement.getContext("2d")
 
-const pathtracer = new Pathtracer(scene, 200, 200, 8)
+const pathtracer = new Pathtracer(scene, 200, 200, flags.nWorkers)
 
 scene.ox = previewElement.width/2
 scene.oy = 200
 
-function render(){
-	pathtracer.frame(
-		() => pathtracer.draw(renderCanvas, 1),
-		render,
-		flags.nBounces
-	)
-}
-
 draw()
-// render()
 pathtracer.render(renderCanvas, {
 	scale: 1,
 	nBounces: flags.nBounces,
