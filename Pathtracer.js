@@ -25,6 +25,14 @@ export default class Pathtracer {
 		}
 	}
 	
+	displayProgress(nIterations){
+		let str = this.iterations+" i"
+		if(nIterations){
+			str += " - "+Math.floor(this.iterations / nIterations / this.workers.length * 100)+"%"
+		}
+		document.title = "Path tracing " + str
+	}
+	
 	startWorker(worker, nBounces, batchSize, sx, sy, sw, sh){
 		worker.postMessage({
 			type: "render",
@@ -50,6 +58,7 @@ export default class Pathtracer {
 				if( e.data.type == "result" ){
 					console.log("Render result")
 					this.iterations++
+					this.displayProgress(nIterations)
 					
 					// Restart worker if limit reached, or if no limit set
 					if(!nIterations || e.data.iterations < nIterations){
