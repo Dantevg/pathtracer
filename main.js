@@ -11,8 +11,10 @@ const flags = {
 	drawRays: true,
 	drawRayHits: false,
 	drawNormals: false,
-	nBounces: 2,
 	fov: 60,
+	nBounces: 2,
+	nIterations: 16,
+	batchSize: 4,
 }
 
 let startTime = performance.now()
@@ -71,7 +73,7 @@ renderElement.width = width
 renderElement.height = height
 const renderCanvas = renderElement.getContext("2d")
 
-const pathtracer = new Pathtracer(scene, 200, 200, 4)
+const pathtracer = new Pathtracer(scene, 200, 200, 8)
 
 scene.ox = previewElement.width/2
 scene.oy = 200
@@ -86,7 +88,12 @@ function render(){
 
 draw()
 // render()
-pathtracer.render(renderCanvas, 1, flags.nBounces, 16)
+pathtracer.render(renderCanvas, {
+	scale: 1,
+	nBounces: flags.nBounces,
+	nIterations: flags.nIterations,
+	batchSize: flags.batchSize,
+})
 
 // Update time points
 startTime = performance.now()

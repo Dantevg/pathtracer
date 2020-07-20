@@ -25,10 +25,11 @@ export default class Pathtracer {
 		}
 	}
 	
-	startWorker(worker, nBounces, sx, sy, sw, sh){
+	startWorker(worker, nBounces, batchSize, sx, sy, sw, sh){
 		worker.postMessage({
 			type: "render",
 			nBounces: nBounces,
+			batchSize: batchSize,
 			width: this.width,
 			height: this.height,
 			sx: sx,
@@ -64,7 +65,7 @@ export default class Pathtracer {
 		}
 	}
 	
-	render(canvas, scale, nBounces = 0, nIterations, onlyFinal){
+	render(canvas, {scale, nBounces = 0, nIterations, batchSize = 1, onlyFinal}){
 		const rows = Pathtracer.findTiling(this.workers.length)
 		const w = Math.floor(this.width / this.workers.length * rows)
 		const h = Math.floor(this.height / rows)
@@ -78,7 +79,7 @@ export default class Pathtracer {
 					
 					// Restart worker if limit reached, or if no limit set
 					if(!nIterations || e.data.iterations < nIterations){
-						this.startWorker(worker, nBounces, w*Math.floor(i/rows), h*(i%rows), w, h)
+						this.startWorker(worker, nBounces, batchSize, w*Math.floor(i/rows), h*(i%rows), w, h)
 					}else{
 						this.running--
 					}
@@ -98,7 +99,7 @@ export default class Pathtracer {
 			}.bind(this)
 			
 			// Start worker
-			this.startWorker(worker, nBounces, w*Math.floor(i/rows), h*(i%rows), w, h)
+			this.startWorker(worker, nBounces, batchSize, w*Math.floor(i/rows), h*(i%rows), w, h)
 			
 			this.running++
 		}
