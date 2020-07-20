@@ -23,7 +23,7 @@ export default class Plane {
 		const u = Vector.subtract(point, this.pos).dot(this.u)
 		const v = Vector.subtract(point, this.pos).dot(this.v)
 		
-		if( u > -this.w/2 && u < this.w/2 && v > -this.h/2 && v < this.h/2 ){
+		if( u >= -this.w/2 && u <= this.w/2 && v >= -this.h/2 && v <= this.h/2 ){
 			return {
 				object: this,
 				point: point,
