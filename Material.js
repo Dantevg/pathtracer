@@ -63,7 +63,9 @@ export default class Material {
 	bounce(ray){
 		let colour = Colour.multiply(ray.colour, ray.to.object.colour, ray.colour.a) // Only for ray visualising
 		
-		if( Math.random() < this.fresnel(ray) ){
+		if( this.emission == 1 ){
+			return // Don't reflect off fully emissive objects
+		}else if( Math.random() < this.fresnel(ray) ){
 			return this.specular(ray, colour)
 		}else if( Math.random() < this.transparency ){
 			return this.transmit(ray, colour)
