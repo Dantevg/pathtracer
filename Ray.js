@@ -17,11 +17,6 @@ export default class Ray {
 	}
 	
 	cast(scene){
-		// Max depth reached
-		if(this.depth < 0){
-			return Colour.TRANSPARENT
-		}
-		
 		this.to = {distSq: Infinity}
 		for( const object of scene ){
 			const hit = object.getIntersection( this )
@@ -30,12 +25,11 @@ export default class Ray {
 			}
 		}
 		
-		if(this.to.object){
+		if(this.depth >= 0 && this.to.object){
 			// Continue tracing (reflect/transmit)
 			this.ray = this.to.object.material.bounce(this)
-			if(this.ray){
-				return this.ray.cast(scene).multiply(this.to.object.colour).add(this.to.object.material.emission)
-			}
+			const colour = this.ray ? this.ray.cast(scene) : Colour.TRANSPARENT
+			return colour.multiply(this.to.object.colour).add(this.to.object.material.emission)
 		}
 		
 		// No object in path or no continuing ray, don't draw
