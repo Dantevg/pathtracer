@@ -99,9 +99,11 @@ export default class Pathtracer {
 	
 	// Draws buffer to canvas
 	draw(canvas, scale, iterations = 1, sx = 0, sy = 0, sw = this.width, sh = this.height){
+		const weight = new Colour(1/iterations)
 		Canvas.draw(
-			this.buffer, canvas, sx, sy, sw, sh, scale,
-			(pixel) => Colour.multiply( pixel, new Colour(1/iterations) ).setAlpha(1).rgb255
+			this.buffer, canvas, this.width, this.height,
+			(pixel) => Colour.multiply( pixel, weight ).rgb255,
+			scale, sx, sy, sw, sh
 		)
 	}
 	
