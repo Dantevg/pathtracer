@@ -13,8 +13,8 @@ export default class Pathtracer {
 			this.workers.push( new Worker("./RenderWorker.js", {type: "module"}) )
 		}
 		
-		this.running = 0
-		this.iterations = 0
+		this.running = 0 // The number of workers currently working
+		this.iterations = 0 // The number of finished iterations
 		
 		this.buffer = []
 		for( let x = 0; x < this.width+10; x++ ){
@@ -64,8 +64,8 @@ export default class Pathtracer {
 		}
 	}
 	
-	render(canvas, scale, nBounces = 0){
-		const w = this.width/this.workers.length
+	render(canvas, scale, nBounces = 0, nIterations, onlyFinal){
+		const w = Math.floor(this.width/this.workers.length)
 		for( let i = 0; i < this.workers.length; i++ ){
 			const worker = this.workers[i]
 			// Initialize worker callback
@@ -73,14 +73,29 @@ export default class Pathtracer {
 				if( e.data.type == "result" ){
 					console.log("Render result")
 					this.iterations++
-					this.startWorker(worker, nBounces, w*i, 0, w)
+					
+					// Restart worker if limit reached, or if no limit set
+					if( !nIterations || e.data.iterations < nIterations ){
+						this.startWorker(worker, nBounces, w*i, 0, w)
+					}else{
+						this.running--
+					}
+					
+					// Add the data to the buffer
 					this.result(e.data.data, w*i, 0)
-					this.draw(canvas, scale, e.data.iterations, w*i, 0, w)
+					
+					// Draw the buffer to the canvas
+					if(onlyFinal && e.data.iterations >= nIterations){
+						this.draw(canvas, scale, e.data.iterations) // Do a full draw
+					}else if(!onlyFinal){
+						this.draw(canvas, scale, e.data.iterations, w*i, 0, w)
+					}
 				}else if(e.data.type == "log"){
 					console.log("[Worker]", ...e.data.data)
 				}
 			}.bind(this)
 			
+			// Start worker
 			this.startWorker(worker, nBounces, w*i, 0, w)
 			
 			this.running++

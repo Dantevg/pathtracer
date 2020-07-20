@@ -81,6 +81,6 @@ function render(){
 
 draw()
 // render()
-pathtracer.render(renderCanvas, 1, flags.nBounces)
+pathtracer.render(renderCanvas, 1, flags.nBounces, 16)
 
 startTime = performance.now() // Update start time point
