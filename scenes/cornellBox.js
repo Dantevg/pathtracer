@@ -26,7 +26,7 @@ scene.objects.push( new Sphere( new Vector(-75, -100, 50), 25, Colour.WHITE, Mat
 scene.objects.push( new Sphere( new Vector(75, 75, 50), 25, Colour.WHITE, Material.matte ) )
 
 // Triangle
-scene.objects.push( new Triangle( new Vector(-100, -100, -100), new Vector(100, 100, -100), new Vector(-100, 100, -100), Colour.WHITE, Material.matte ) )
+// scene.objects.push( new Triangle( new Vector(-100, -100, -100), new Vector(100, 100, -100), new Vector(-100, 100, -100), Colour.WHITE, Material.matte ) )
 
 // Camera
 scene.camera = new Camera( new Vector(0, -350, 0), new Vector(1,0,0), new Vector(0,0,-1), 20, 20, 1 )
