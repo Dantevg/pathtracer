@@ -19,7 +19,7 @@ scene.objects.push( new Plane( new Vector(-128, 0, 0), new Vector(0,1,0), new Ve
 // Right wall
 scene.objects.push( new Plane( new Vector(128, 0, 0), new Vector(0,-1,0), new Vector(0,0,1), 256, 256, Colour.GREEN, Material.matte ) )
 
-scene.objects.push( new Sphere( new Vector(0, 0, -100), 50, Colour.WHITE, Material.matte ) )
+scene.objects.push( new Sphere( new Vector(0, 0, -50), 50, Colour.WHITE, Material.matte ) )
 
 scene.camera = new Camera( new Vector(0, -350, 0), new Vector(1,0,0), new Vector(0,0,-1), 20, 20, 1 )
 scene.camera.scene = scene

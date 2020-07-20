@@ -16,6 +16,7 @@ const flags = {
 }
 
 let startTime = performance.now()
+let endTime = performance.now()
 
 // Fix JavaScript's modulo function
 // Now (-5) % 7 gives 3 instead of -5
@@ -29,7 +30,7 @@ function drawFlags(canvas){
 	canvas.fillRect(0, 0, 180, 190)
 	canvas.font = "10px monospace"
 	canvas.fillStyle = "#FFFFFF"
-	canvas.fillText(Math.round(pathtracer.iterations / (performance.now() - startTime) * 10000)/10, 10, 15)
+	canvas.fillText(Math.round(pathtracer.iterations / (endTime - startTime) * 10000)/10, 10, 15)
 	let i = 2
 	for( const flag in flags ){
 		if(typeof flags[flag] == "object"){
@@ -45,6 +46,10 @@ function drawFlags(canvas){
 }
 
 function draw(){
+	if(pathtracer.running > 0){
+		endTime = performance.now()
+	}
+	
 	previewCanvas.fillStyle = "#000000"
 	previewCanvas.fillRect(0, 0, previewElement.width, previewElement.height)
 	scene.preview(previewCanvas, flags)
@@ -83,4 +88,6 @@ draw()
 // render()
 pathtracer.render(renderCanvas, 1, flags.nBounces, 16)
 
-startTime = performance.now() // Update start time point
+// Update time points
+startTime = performance.now()
+endTime = performance.now()
