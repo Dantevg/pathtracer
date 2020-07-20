@@ -75,7 +75,7 @@ export default class Pathtracer {
 					this.iterations++
 					this.startWorker(worker, nBounces, w*i, 0, w)
 					this.result(e.data.data, w*i, 0)
-					this.draw(canvas, scale, w*i, 0, w)
+					this.draw(canvas, scale, e.data.iterations, w*i, 0, w)
 				}else if(e.data.type == "log"){
 					console.log("[Worker]", ...e.data.data)
 				}
@@ -98,10 +98,10 @@ export default class Pathtracer {
 	}
 	
 	// Draws buffer to canvas
-	draw(canvas, scale, sx = 0, sy = 0, sw = this.width, sh = this.height){
+	draw(canvas, scale, iterations = 1, sx = 0, sy = 0, sw = this.width, sh = this.height){
 		Canvas.draw(
 			this.buffer, canvas, sx, sy, sw, sh, scale,
-			(pixel) => Colour.multiply( pixel, new Colour(1/this.iterations*this.workers.length) ).setAlpha(1).rgb255
+			(pixel) => Colour.multiply( pixel, new Colour(1/iterations) ).setAlpha(1).rgb255
 		)
 	}
 	
