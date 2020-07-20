@@ -10,13 +10,13 @@ export default class Camera extends Plane {
 		this.sensitivity = sensitivity
 	}
 	
-	init(width, height, sx = 0, sy = 0, sw, sh){
+	init(width, height, sx = 0, sy = 0, sw = width, sh = height){
 		this.width = width
 		this.height = height
 		this.sx = sx
 		this.sy = sy
-		this.sw = sw ?? width
-		this.sh = sh ?? height
+		this.sw = sw
+		this.sh = sh
 		
 		const horizontal = Vector.multiply(this.u, 0.5*this.w)
 		const vertical = Vector.multiply(this.v, 0.5*this.h)
