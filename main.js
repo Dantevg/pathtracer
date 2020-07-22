@@ -4,8 +4,8 @@ import Scene from "./Scene.js"
 const sceneSrc = "./scenes/obj.js"
 
 // Constants and settings
-const width = 200
-const height = 200
+const width = 300
+const height = 300
 
 const flags = {
 	drawObjectFills: false,
@@ -15,7 +15,7 @@ const flags = {
 	drawNormals: false,
 	fov: 60,
 	nBounces: 2,
-	nIterations: 8,
+	nIterations: 16,
 	batchSize: 1,
 	nWorkers: 8,
 }
@@ -25,6 +25,21 @@ const flags = {
 // Source: https://stackoverflow.com/questions/4467539/javascript-modulo-gives-a-negative-result-for-negative-numbers
 function mod(n, m){
 	return ((n % m) + m) % m
+}
+
+function createOptions(){
+	const optionsContainer = document.getElementById("options")
+	optionsContainer.innerHTML = `<table></table>`
+	const container = optionsContainer.getElementsByTagName("table")[0]
+	for( const name in flags ){
+		if(typeof flags[name] == "boolean"){
+			container.innerHTML += `<tr><td><label for="options-${name}">${name}</label></td>
+			<td><input type="checkbox" id="options-${name}" name="options-${name}" ${flags[name] ? "checked" : ""}></td></tr>`
+		}else if(typeof flags[name] == "number"){
+			container.innerHTML += `<tr><td><label for="options-${name}">${name}</label></td>
+			<td><input type="number" id="options-${name}" name="options-${name}" value="${flags[name]}"></td></tr>`
+		}
+	}
 }
 
 function drawFlags(canvas){
@@ -74,6 +89,8 @@ renderElement.height = height
 const renderCanvas = renderElement.getContext("2d")
 
 const pathtracer = new Pathtracer(sceneSrc, width, height, flags.nWorkers)
+
+createOptions()
 
 Scene.load(sceneSrc).then(scene => {
 	scene.ox = previewElement.width/2
