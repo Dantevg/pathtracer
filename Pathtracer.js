@@ -2,8 +2,7 @@ import Colour from "./lib/Colour.js"
 import Canvas from "./lib/Canvas.js"
 
 export default class Pathtracer {
-	constructor(scene, width, height, nWorkers = 1){
-		this.scene = scene
+	constructor(sceneSrc, width, height, nWorkers = 1){
 		this.width = width
 		this.height = height
 		
@@ -11,6 +10,10 @@ export default class Pathtracer {
 		this.workers = []
 		for( let i = 0; i < nWorkers; i++ ){
 			this.workers.push( new Worker("./RenderWorker.js", {type: "module"}) )
+			this.workers[i].postMessage({
+				type: "init",
+				src: sceneSrc
+			})
 		}
 		
 		this.running = 0 // The number of workers currently working
@@ -55,12 +58,16 @@ export default class Pathtracer {
 			const worker = this.workers[i]
 			// Initialize worker callback
 			worker.onmessage = function(e){
-				if( e.data.type == "result" ){
+				if(e.data.type == "ready"){
+					// Worker is done loading scene, start it
+					this.startWorker(worker, nBounces, batchSize, w*Math.floor(i/rows), h*(i%rows), w, h)
+				}else if( e.data.type == "result" ){
+					// Worker is done tracing, restart if limit not reached
 					console.log("Render result")
 					this.iterations++
 					this.displayProgress(nIterations)
 					
-					// Restart worker if limit reached, or if no limit set
+					// Restart worker if limit not reached, or if no limit set
 					if(!nIterations || e.data.iterations < nIterations){
 						this.startWorker(worker, nBounces, batchSize, w*Math.floor(i/rows), h*(i%rows), w, h)
 					}else{
@@ -77,12 +84,10 @@ export default class Pathtracer {
 						this.draw(canvas, scale, e.data.iterations, w*Math.floor(i/rows), h*(i%rows), w, h)
 					}
 				}else if(e.data.type == "log"){
+					// Worker sent a message, log it
 					console.log("[Worker]", ...e.data.data)
 				}
-			}.bind(this)
-			
-			// Start worker
-			this.startWorker(worker, nBounces, batchSize, w*Math.floor(i/rows), h*(i%rows), w, h)
+			}.bind(this) // Make sure I can use 'this'
 			
 			this.running++
 		}

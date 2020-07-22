@@ -1,5 +1,7 @@
 import Pathtracer from "./Pathtracer.js"
-import scene from "./scenes/cornellBox.js"
+import Scene from "./Scene.js"
+
+const sceneSrc = "./scenes/cornellBox.js"
 
 // Constants and settings
 const width = 300
@@ -48,7 +50,14 @@ function drawFlags(canvas){
 	}
 }
 
-function draw(){
+function init(scene){
+	scene.ox = previewElement.width/2
+	scene.oy = 200
+
+	draw(scene)
+}
+
+function draw(scene){
 	if(pathtracer.running > 0){
 		endTime = performance.now()
 	}
@@ -58,7 +67,7 @@ function draw(){
 	scene.preview(previewCanvas, flags)
 	drawFlags(previewCanvas)
 	
-	requestAnimationFrame(draw)
+	requestAnimationFrame(() => draw(scene))
 }
 
 // Initialize
@@ -74,12 +83,15 @@ renderElement.width = width
 renderElement.height = height
 const renderCanvas = renderElement.getContext("2d")
 
-const pathtracer = new Pathtracer(scene, 200, 200, flags.nWorkers)
+const pathtracer = new Pathtracer(sceneSrc, 200, 200, flags.nWorkers)
 
-scene.ox = previewElement.width/2
-scene.oy = 200
+Scene.load(sceneSrc).then(scene => {
+	scene.ox = previewElement.width/2
+	scene.oy = 200
+	
+	draw(scene)
+})
 
-draw()
 pathtracer.render(renderCanvas, {
 	scale: 1,
 	nBounces: flags.nBounces,
