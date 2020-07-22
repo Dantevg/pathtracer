@@ -16,11 +16,11 @@ scene.camera.scene = scene
 // Light
 scene.objects.push( new Plane(new Vector(0, 0, 500), new Vector(1, 0, 0), new Vector(0, 11, 0), 1000, 1000, Colour.WHITE, Material.emissive) )
 
-promises.push(fetch("./scenes/cube.obj")
+promises.push(fetch("./scenes/icosahedron.obj")
 	.then(response => response.text())
 	.then(data => {
-		const [vertices, faces] = Scene.parseOBJ(data, 50, new Vector(0, 100, 0))
-		scene.objects.push(new TriangleMesh(vertices, faces, Colour.MAGENTA, Material.matte))
+		const [vertices, faces] = Scene.parseOBJ(data, 100, new Vector(0, 0, 0))
+		scene.objects.push(new TriangleMesh(vertices, faces, Colour.WHITE, Material.matte))
 	}))
 
 export default async function(){

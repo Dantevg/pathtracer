@@ -1,7 +1,7 @@
 import Pathtracer from "./Pathtracer.js"
 import Scene from "./Scene.js"
 
-const sceneSrc = "./scenes/cornellBox.js"
+const sceneSrc = "./scenes/obj.js"
 
 // Constants and settings
 const width = 300
