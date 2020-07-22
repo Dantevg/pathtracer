@@ -23,11 +23,11 @@ export default class Scene {
 	
 	static parseOBJ(obj, scale = 1, offset = new Vector(0, 0, 0)){
 		const vertices = (obj.match(/^v(\s+-?\d+(\.\d+)?){3}$/gm) ?? [])
-			.map( vertex => new Vector( ...vertex.split(" ").map(x => Number(x)*scale).slice(1) ).add(offset) )
+			.map( vertex => new Vector( ...vertex.split(/\s+/).map(x => Number(x)*scale).slice(1) ).add(offset) )
 		vertices.unshift(0) // Add an element to the start, because vertex indices start at 1
 		
 		const faces = (obj.match(/^f(\s+[\d+\/?]+){3}$/gm) ?? [])
-			.map( face => face.split(" ").map(x => Number(x.split("/")[0])).slice(1) )
+			.map( face => face.split(/\s+/).map(x => Number(x.split("/")[0])).slice(1) )
 		
 		return [vertices, faces]
 	}
