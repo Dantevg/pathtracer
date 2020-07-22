@@ -50,13 +50,6 @@ function drawFlags(canvas){
 	}
 }
 
-function init(scene){
-	scene.ox = previewElement.width/2
-	scene.oy = 200
-
-	draw(scene)
-}
-
 function draw(scene){
 	if(pathtracer.running > 0){
 		endTime = performance.now()
