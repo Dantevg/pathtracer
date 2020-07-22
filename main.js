@@ -20,9 +20,6 @@ const flags = {
 	nWorkers: 8,
 }
 
-let startTime = performance.now()
-let endTime = performance.now()
-
 // Fix JavaScript's modulo function
 // Now (-5) % 7 gives 3 instead of -5
 // Source: https://stackoverflow.com/questions/4467539/javascript-modulo-gives-a-negative-result-for-negative-numbers
@@ -93,5 +90,5 @@ pathtracer.render(renderCanvas, {
 })
 
 // Update time points
-startTime = performance.now()
-endTime = performance.now()
+let startTime = performance.now()
+let endTime = performance.now()
