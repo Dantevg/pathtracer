@@ -60,6 +60,12 @@ export default class Material {
 		}
 	}
 	
+	schlick(dir, normal){
+		const cosIncident = Vector.multiply(dir, -1).dot(normal)
+		const fresnel = new Vector(0.04, 0.04, 0.04)
+		return fresnel.add( new Vector(1, 1, 1).subtract(fresnel) ).multiply( Math.pow(1 - cosIncident, 5) )
+	}
+	
 	bounce(ray){
 		let colour = Colour.multiply(ray.colour, ray.to.object.colour, ray.colour.a) // Only for ray visualising
 		
