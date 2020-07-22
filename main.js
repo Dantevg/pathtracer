@@ -4,8 +4,8 @@ import Scene from "./Scene.js"
 const sceneSrc = "./scenes/obj.js"
 
 // Constants and settings
-const width = 300
-const height = 300
+const width = 200
+const height = 200
 
 const flags = {
 	drawObjectFills: false,
@@ -83,7 +83,7 @@ renderElement.width = width
 renderElement.height = height
 const renderCanvas = renderElement.getContext("2d")
 
-const pathtracer = new Pathtracer(sceneSrc, 200, 200, flags.nWorkers)
+const pathtracer = new Pathtracer(sceneSrc, width, height, flags.nWorkers)
 
 Scene.load(sceneSrc).then(scene => {
 	scene.ox = previewElement.width/2
