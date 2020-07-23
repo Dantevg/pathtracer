@@ -16,6 +16,7 @@ export default class Pathtracer {
 			})
 		}
 		
+		this.rendering = false
 		this.running = 0 // The number of workers currently working
 		this.iterations = 0 // The number of finished iterations
 		
@@ -51,6 +52,7 @@ export default class Pathtracer {
 	}
 	
 	render(canvas, {scale, nBounces = 0, nIterations, batchSize = 1, onlyFinal}){
+		this.rendering = true
 		const rows = Pathtracer.findTiling(this.workers.length)
 		const w = Math.floor(this.width / this.workers.length * rows)
 		const h = Math.floor(this.height / rows)
@@ -58,6 +60,7 @@ export default class Pathtracer {
 			const worker = this.workers[i]
 			// Initialize worker callback
 			worker.onmessage = function(e){
+				if(!this.rendering) return
 				if(e.data.type == "ready"){
 					// Worker is done loading scene, start it
 					this.startWorker(worker, nBounces, batchSize, w*Math.floor(i/rows), h*(i%rows), w, h)
@@ -82,6 +85,11 @@ export default class Pathtracer {
 						this.draw(canvas, scale, this.iterations/this.workers.length) // Do a full draw
 					}else if(!onlyFinal){
 						this.draw(canvas, scale, e.data.iterations, w*Math.floor(i/rows), h*(i%rows), w, h)
+					}
+					
+					// Call events if complete
+					if(this.running == 0 && this.onrendercomplete instanceof Function){
+						this.onrendercomplete()
 					}
 				}else if(e.data.type == "log"){
 					// Worker sent a message, log it
