@@ -10,13 +10,16 @@ import Triangle from "../shapes/Triangle.js"
 const scene = new Scene()
 
 // Floor
-scene.objects.push( new Plane( new Vector(0, 0, -128), new Vector(1,0,0), new Vector(0,1,0), 256, 256, Colour.WHITE, Material.matte ) )
+scene.objects.push( new Plane( new Vector(0, 0, -128), new Vector(1,0,0), new Vector(0,1,0), 512, 1024, Colour.WHITE, Material.transparent ) )
 
 // Sphere
-scene.objects.push( new Sphere( new Vector(0, 256, 0), 50, Colour.WHITE, Material.emissive ) )
+scene.objects.push( new Sphere( new Vector(0, 0, -256), 64, Colour.WHITE, Material.matte ) )
+scene.objects.push( new Sphere( new Vector(0, -128, -256), 64, Colour.WHITE, Material.matte ) )
+scene.objects.push( new Sphere( new Vector(0, -256, -256), 64, Colour.YELLOW, Material.matte ) )
+scene.objects.push( new Plane( new Vector(128, 512, 128), new Vector(1,0,0), new Vector(0,0,1), 256, 512, Colour.WHITE, Material.emissive ) )
 
 // Camera
-scene.camera = new Camera( new Vector(0, -350, 0), new Vector(1,0,0), new Vector(0,0,-1), 20, 20, 1 )
+scene.camera = new Camera( new Vector(0, -512, 0), new Vector(1,0,0), new Vector(0,0,-1), 20, 20, 1 )
 scene.camera.scene = scene
 
-export default scene
+export default async () => scene

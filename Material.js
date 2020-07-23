@@ -34,12 +34,39 @@ export default class Material {
 			c1 = -c1
 			var n = 1 / this.ior
 		}else{ // Ray outgoing
-			N = Vector.multiply(N, -1);
+			N = Vector.multiply(N, -1)
 			var n = this.ior / 1
 		}
 		const c2 = Math.sqrt( 1 - n*n * (1-c1*c1) )
 		const dir = Vector.multiply(ray.dir, n).add( Vector.multiply(N, n*c1 - c2) )
 		return new Ray( Vector.add(ray.to.point, Vector.multiply(dir, 0.001)), dir, ray.depth-1, colour )
+	}
+	
+	// https://29a.ch/sandbox/2010/cornellbox/worker.js
+	fresnel2(ray){
+		var theta1 = Math.abs(ray.dir.dot(ray.to.normal));
+		if(theta1 >= 0.0) {
+				var internalIndex = this.ior;
+				var externalIndex = 1.0;
+		}
+		else {
+				var internalIndex = 1.0;
+				var externalIndex = this.ior;
+		}
+		var eta = externalIndex/internalIndex;
+		var theta2 = Math.sqrt(1.0 - (eta * eta) * (1.0 - (theta1 * theta1)));
+		var rs = (externalIndex * theta1 - internalIndex * theta2) / (externalIndex*theta1 + internalIndex * theta2);
+		var rp = (internalIndex * theta1 - externalIndex * theta2) / (internalIndex*theta1 + externalIndex * theta2);
+		var reflectance = (rs*rs + rp*rp);
+		// reflection
+		if(Math.random() < reflectance+0.1) {
+			return Vector.add(ray.dir, Vector.multiply(ray.to.normal, theta1*2))
+		}
+		// refraction
+		return Vector.add(ray.dir, Vector.multiply(ray.to.normal, theta1).multiply(eta).add(
+			Vector.multiply(ray.to.normal, -theta2)
+		))
+		//return ray.dir.muls(eta).sub(normal.muls(theta2-eta*theta1));
 	}
 	
 	fresnel(ray){
@@ -48,11 +75,11 @@ export default class Material {
 		let etat = this.ior
 		if(cosi > 0) [etai, etat] = [etat, etai]
 		
-		const sint = etai / etat * Math.sqrt(1-cosi*cosi)
+		const sint = etai / etat * Math.sqrt(Math.max(0, 1-cosi*cosi))
 		if(sint >= 1){
 			return 1
 		}else{
-			const cost = Math.sqrt(1 - sint*sint)
+			const cost = Math.sqrt(Math.max(0, 1 - sint*sint))
 			cosi = Math.abs(cosi)
 			const rs = (etat*cosi - etai*cost) / (etat*cosi + etai*cost)
 			const rp = (etai*cosi - etat*cost) / (etai*cosi + etat*cost)
@@ -71,13 +98,20 @@ export default class Material {
 		
 		if( this.emission == 1 ){
 			return // Don't reflect off fully emissive objects
-		}else if( Math.random() < this.fresnel(ray) ){
-			return this.specular(ray, colour)
-		}else if( Math.random() < this.transparency ){
-			return this.transmit(ray, colour)
+		}else if(Math.random() < this.transparency){
+			const dir = this.fresnel2(ray)
+			return new Ray( Vector.add(ray.to.point, Vector.multiply(dir, 0.001)), dir, ray.depth-1, colour )
 		}else{
 			return this.diffuse(ray, colour)
 		}
+		
+		// if( Math.random() < this.fresnel(ray) ){
+		// 	return this.specular(ray, colour)
+		// }else if( Math.random() < this.transparency ){
+		// 	return this.transmit(ray, colour)
+		// }else{
+		// 	return this.diffuse(ray, colour)
+		// }
 	}
 	
 	// Some default materials
