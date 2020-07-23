@@ -153,6 +153,8 @@ const previewCanvas = previewElement.getContext("2d")
 const renderElement = document.getElementById("render")
 renderElement.width = width
 renderElement.height = height
+renderElement.style.width = width+"px"
+renderElement.style.height = height+"px"
 const renderCanvas = renderElement.getContext("2d")
 
 init(sceneSrc)
