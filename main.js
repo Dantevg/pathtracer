@@ -1,7 +1,7 @@
 import Pathtracer from "./Pathtracer.js"
 import Scene from "./Scene.js"
 
-const sceneSrc = "./scenes/customObj.js"
+const sceneSrc = "./scenes/cornellBox.js"
 
 // Constants and settings
 const width = 300
@@ -74,8 +74,7 @@ function createUI(){
 		if(this.files[0] == undefined) return
 		const obj = await this.files[0].text()
 		pathtracer.stop()
-		console.log(obj)
-		init(obj)
+		init("./scenes/customObj.js", obj)
 	}
 	buttons.appendChild(fileinput)
 }
@@ -100,13 +99,13 @@ function drawFlags(canvas){
 	}
 }
 
-function init(obj){
-	console.log("Loading")
+function init(src = sceneSrc, obj){
+	console.log("Loading scene from "+src)
 	// Update time points
 	startTime = performance.now()
 	endTime = performance.now()
 	
-	Scene.load(sceneSrc, obj).then(scene => {
+	Scene.load(src, obj).then(scene => {
 		scene.ox = previewElement.width/2
 		scene.oy = 200
 		
@@ -117,7 +116,7 @@ function init(obj){
 		drawRequestID = requestAnimationFrame(() => draw(scene))
 	})
 	
-	pathtracer = new Pathtracer(sceneSrc, width, height, flags.nWorkers, obj)
+	pathtracer = new Pathtracer(src, width, height, flags.nWorkers, obj)
 	pathtracer.render(renderCanvas, {
 		scale: 1,
 		nBounces: flags.nBounces,
