@@ -1,7 +1,8 @@
 import Pathtracer from "./Pathtracer.js"
 import Scene from "./Scene.js"
 
-const sceneSrc = "./scenes/cornellBox.js"
+let sceneSrc = "./scenes/cornellBox.js"
+let sceneObj = ""
 
 // Constants and settings
 const width = 300
@@ -99,24 +100,28 @@ function drawFlags(canvas){
 	}
 }
 
-function init(src = sceneSrc, obj){
-	console.log("Loading scene from "+src)
+function init(src, obj = sceneObj){
 	// Update time points
 	startTime = performance.now()
 	endTime = performance.now()
 	
-	Scene.load(src, obj).then(scene => {
-		scene.ox = previewElement.width/2
-		scene.oy = 200
-		
-		// Restart drawing
-		if(drawRequestID){
-			cancelAnimationFrame(drawRequestID)
-		}
-		drawRequestID = requestAnimationFrame(() => draw(scene))
-	})
+	if(src){
+		sceneSrc = src
+		console.log("Loading scene from "+src)
+		Scene.load(src, obj).then(scene => {
+			scene.ox = previewElement.width/2
+			scene.oy = 200
+			
+			// Restart drawing
+			if(drawRequestID){
+				cancelAnimationFrame(drawRequestID)
+			}
+			drawRequestID = requestAnimationFrame(() => draw(scene))
+		})
+	}
+	sceneObj = obj
 	
-	pathtracer = new Pathtracer(src, width, height, flags.nWorkers, obj)
+	pathtracer = new Pathtracer(sceneSrc, width, height, flags.nWorkers, obj)
 	pathtracer.render(renderCanvas, {
 		scale: 1,
 		nBounces: flags.nBounces,
@@ -149,5 +154,5 @@ renderElement.width = width
 renderElement.height = height
 const renderCanvas = renderElement.getContext("2d")
 
-init()
+init(sceneSrc)
 createUI()
