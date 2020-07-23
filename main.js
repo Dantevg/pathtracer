@@ -61,7 +61,7 @@ function createUI(){
 	const button = document.createElement("button")
 	button.innerText = "Retrace"
 	button.onclick = function(event){
-		pathtracer.rendering = false
+		pathtracer.stop()
 		init()
 	}
 	buttons.appendChild(button)
