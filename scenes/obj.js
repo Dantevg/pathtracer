@@ -14,7 +14,7 @@ scene.camera = new Camera( new Vector(0, -350, 0), new Vector(1,0,0), new Vector
 scene.camera.scene = scene
 
 // Light
-scene.objects.push( new Plane(new Vector(0, 0, 500), new Vector(1, 0, 0), new Vector(0, 11, 0), 1000, 1000, Colour.WHITE, Material.emissive) )
+scene.objects.push( new Plane(new Vector(0, 0, 500), new Vector(1, 0, 0), new Vector(0, -1, 0), 1000, 1000, Colour.WHITE, Material.emissive) )
 
 promises.push(fetch("./scenes/icosahedron.obj")
 	.then(response => response.text())
