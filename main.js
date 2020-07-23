@@ -77,6 +77,7 @@ function createUI(){
 		pathtracer.stop()
 		init("./scenes/customObj.js", obj)
 	}
+	buttons.append("Upload .obj file (warning: files with more than a couple faces will slow down severely!)")
 	buttons.appendChild(fileinput)
 }
 

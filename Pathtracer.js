@@ -61,6 +61,7 @@ export default class Pathtracer {
 			worker.onmessage = function(e){
 				if(e.data.type == "ready"){
 					// Worker is done loading scene, start it
+					console.log("Starting worker")
 					this.startWorker(worker, nBounces, batchSize, w*Math.floor(i/rows), h*(i%rows), w, h)
 				}else if( e.data.type == "result" ){
 					// Worker is done tracing, restart if limit not reached
