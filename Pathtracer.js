@@ -2,7 +2,7 @@ import Colour from "./lib/Colour.js"
 import Canvas from "./lib/Canvas.js"
 
 export default class Pathtracer {
-	constructor(sceneSrc, width, height, nWorkers = 1){
+	constructor(sceneSrc, width, height, nWorkers = 1, obj){
 		this.width = width
 		this.height = height
 		
@@ -12,7 +12,8 @@ export default class Pathtracer {
 			this.workers.push( new Worker("./RenderWorker.js", {type: "module"}) )
 			this.workers[i].postMessage({
 				type: "init",
-				src: sceneSrc
+				src: sceneSrc,
+				obj: obj,
 			})
 		}
 		

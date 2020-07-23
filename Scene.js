@@ -17,8 +17,8 @@ export default class Scene {
 		canvas.restore()
 	}
 	
-	static async load(src){
-		return (await import(src)).default()
+	static async load(src, obj){
+		return (await import(src)).default(obj)
 	}
 	
 	static parseOBJ(obj, scale = 1, offset = new Vector(0, 0, 0)){

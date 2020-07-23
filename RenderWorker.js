@@ -10,7 +10,7 @@ let iterations = 0
 onmessage = function(e){
 	if(e.data.type == "init"){
 		// Load the specified scene
-		Scene.load(e.data.src).then(module => {
+		Scene.load(e.data.src, e.data.obj).then(module => {
 			scene = module
 			postMessage({type: "ready"})
 		})

@@ -1,7 +1,7 @@
 import Pathtracer from "./Pathtracer.js"
 import Scene from "./Scene.js"
 
-const sceneSrc = "./scenes/obj.js"
+const sceneSrc = "./scenes/customObj.js"
 
 // Constants and settings
 const width = 300
@@ -20,7 +20,7 @@ const flags = {
 	nWorkers: 4,
 }
 
-let pathtracer
+let pathtracer, drawRequestID, startTime, endTime
 
 // Fix JavaScript's modulo function
 // Now (-5) % 7 gives 3 instead of -5
@@ -65,6 +65,19 @@ function createUI(){
 		init()
 	}
 	buttons.appendChild(button)
+	
+	const fileinput = document.createElement("input")
+	fileinput.type = "file"
+	fileinput.id = "objupload"
+	fileinput.name = "objupload"
+	fileinput.onchange = async function(){
+		if(this.files[0] == undefined) return
+		const obj = await this.files[0].text()
+		pathtracer.stop()
+		console.log(obj)
+		init(obj)
+	}
+	buttons.appendChild(fileinput)
 }
 
 function drawFlags(canvas){
@@ -87,9 +100,24 @@ function drawFlags(canvas){
 	}
 }
 
-function init(){
+function init(obj){
 	console.log("Loading")
-	pathtracer = new Pathtracer(sceneSrc, width, height, flags.nWorkers)
+	// Update time points
+	startTime = performance.now()
+	endTime = performance.now()
+	
+	Scene.load(sceneSrc, obj).then(scene => {
+		scene.ox = previewElement.width/2
+		scene.oy = 200
+		
+		// Restart drawing
+		if(drawRequestID){
+			cancelAnimationFrame(drawRequestID)
+		}
+		drawRequestID = requestAnimationFrame(() => draw(scene))
+	})
+	
+	pathtracer = new Pathtracer(sceneSrc, width, height, flags.nWorkers, obj)
 	pathtracer.render(renderCanvas, {
 		scale: 1,
 		nBounces: flags.nBounces,
@@ -108,7 +136,7 @@ function draw(scene){
 	scene.preview(previewCanvas, flags)
 	drawFlags(previewCanvas)
 	
-	requestAnimationFrame(() => draw(scene))
+	drawRequestID = requestAnimationFrame(() => draw(scene))
 }
 
 // Initialize
@@ -124,14 +152,3 @@ const renderCanvas = renderElement.getContext("2d")
 
 init()
 createUI()
-
-Scene.load(sceneSrc).then(scene => {
-	scene.ox = previewElement.width/2
-	scene.oy = 200
-	
-	draw(scene)
-})
-
-// Update time points
-let startTime = performance.now()
-let endTime = performance.now()
