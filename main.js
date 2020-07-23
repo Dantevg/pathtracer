@@ -18,7 +18,7 @@ const flags = {
 	nBounces: 2,
 	nIterations: 16,
 	batchSize: 1,
-	nWorkers: 4,
+	nWorkers: window.navigator.hardwareConcurrency,
 }
 
 let pathtracer, drawRequestID, startTime, endTime
