@@ -15,7 +15,7 @@ const flags = {
 	drawRayHits: false,
 	drawNormals: false,
 	fov: 60,
-	nBounces: 2,
+	nBounces: 4,
 	nIterations: 16,
 	batchSize: 1,
 	nWorkers: window.navigator.hardwareConcurrency,

@@ -42,33 +42,6 @@ export default class Material {
 		return new Ray( Vector.add(ray.to.point, Vector.multiply(dir, 0.001)), dir, ray.depth-1, colour )
 	}
 	
-	// https://29a.ch/sandbox/2010/cornellbox/worker.js
-	fresnel2(ray){
-		var theta1 = Math.abs(ray.dir.dot(ray.to.normal));
-		if(theta1 >= 0.0) {
-				var internalIndex = this.ior;
-				var externalIndex = 1.0;
-		}
-		else {
-				var internalIndex = 1.0;
-				var externalIndex = this.ior;
-		}
-		var eta = externalIndex/internalIndex;
-		var theta2 = Math.sqrt(1.0 - (eta * eta) * (1.0 - (theta1 * theta1)));
-		var rs = (externalIndex * theta1 - internalIndex * theta2) / (externalIndex*theta1 + internalIndex * theta2);
-		var rp = (internalIndex * theta1 - externalIndex * theta2) / (internalIndex*theta1 + externalIndex * theta2);
-		var reflectance = (rs*rs + rp*rp);
-		// reflection
-		if(Math.random() < reflectance+0.1) {
-			return Vector.add(ray.dir, Vector.multiply(ray.to.normal, theta1*2))
-		}
-		// refraction
-		return Vector.add(ray.dir, Vector.multiply(ray.to.normal, theta1).multiply(eta).add(
-			Vector.multiply(ray.to.normal, -theta2)
-		))
-		//return ray.dir.muls(eta).sub(normal.muls(theta2-eta*theta1));
-	}
-	
 	fresnel(ray){
 		let cosi = Math.min( Math.max(-1, ray.dir.dot(ray.to.normal)), 1 )
 		let etai = 1
@@ -87,10 +60,9 @@ export default class Material {
 		}
 	}
 	
-	schlick(dir, normal){
-		const cosIncident = Vector.multiply(dir, -1).dot(normal)
-		const fresnel = new Vector(0.04, 0.04, 0.04)
-		return fresnel.add( new Vector(1, 1, 1).subtract(fresnel) ).multiply( Math.pow(1 - cosIncident, 5) )
+	// https://stackoverflow.com/a/33002487
+	schlick(ray){
+		return Math.pow( 1 - Math.abs(Vector.dot(ray.to.normal,ray.dir)), 5 )
 	}
 	
 	bounce(ray){
@@ -98,20 +70,13 @@ export default class Material {
 		
 		if( this.emission == 1 ){
 			return // Don't reflect off fully emissive objects
-		}else if(Math.random() < this.transparency){
-			const dir = this.fresnel2(ray)
-			return new Ray( Vector.add(ray.to.point, Vector.multiply(dir, 0.001)), dir, ray.depth-1, colour )
+		}else if( Math.random() < this.fresnel(ray)*(1-this.roughness) ){
+			return this.specular(ray, colour)
+		}else if( Math.random() < this.transparency ){
+			return this.transmit(ray, colour)
 		}else{
 			return this.diffuse(ray, colour)
 		}
-		
-		// if( Math.random() < this.fresnel(ray) ){
-		// 	return this.specular(ray, colour)
-		// }else if( Math.random() < this.transparency ){
-		// 	return this.transmit(ray, colour)
-		// }else{
-		// 	return this.diffuse(ray, colour)
-		// }
 	}
 	
 	// Some default materials
