@@ -17,14 +17,16 @@ scene.objects.push( new Plane( new Vector(0, 0, 128), new Vector(1,0,0), new Vec
 scene.objects.push( new Plane( new Vector(0, 0, -128), new Vector(1,0,0), new Vector(0,1,0), 256, 256, Colour.WHITE, Material.matte ) )
 // Back wall
 scene.objects.push( new Plane( new Vector(0, 128, 0), new Vector(1,0,0), new Vector(0,0,1), 256, 256, Colour.WHITE, Material.matte ) )
+// Front wall
+scene.objects.push( new Plane( new Vector(0, -128, 0), new Vector(-1,0,0), new Vector(0,0,1), 256, 256, Colour.WHITE, Material.matte ) )
 // Left wall
 scene.objects.push( new Plane( new Vector(-128, 0, 0), new Vector(0,1,0), new Vector(0,0,1), 256, 256, Colour.RED, Material.matte ) )
 // Right wall
 scene.objects.push( new Plane( new Vector(128, 0, 0), new Vector(0,-1,0), new Vector(0,0,1), 256, 256, Colour.GREEN, Material.matte ) )
 
-// Center sphere
+// Spheres
 scene.objects.push( new Sphere( new Vector(0, 0, -50), 50, Colour.WHITE, Material.matte ) )
-scene.objects.push( new Sphere( new Vector(-75, -100, 50), 25, Colour.WHITE, Material.matte ) )
+scene.objects.push( new Sphere( new Vector(-75, -75, 50), 25, Colour.WHITE, Material.matte ) )
 scene.objects.push( new Sphere( new Vector(75, 75, 50), 25, Colour.WHITE, Material.matte ) )
 
 // Triangle

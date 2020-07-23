@@ -14,7 +14,7 @@ export default class Plane {
 	getIntersection(ray){
 		const normal = this.getNormal()
 		const denominator = normal.dot(ray.dir)
-		if(Math.abs(denominator) < Number.EPSILON) return false // Parallel
+		if(denominator > Number.EPSILON) return false // Parallel
 		
 		const t = normal.dot(Vector.subtract(this.pos, ray.pos)) / denominator
 		if(t < 0) return false // Behind ray
