@@ -96,7 +96,7 @@ export default class Pathtracer {
 	// Discards the worker's results
 	stop(){
 		for( const worker of this.workers ){
-			worker.onmessage = function(){}
+			worker.terminate()
 		}
 	}
 	
