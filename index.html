@@ -18,7 +18,7 @@
 			flex-basis: 0;
 			flex-grow: 1;
 		}
-		#buttons * {
+		#buttons > * {
 			display: block;
 			margin-bottom: 10px;
 		}
@@ -31,6 +31,10 @@
 	<canvas id="preview"></canvas>
 	<canvas id="render"></canvas>
 	<table id="options"></table>
-	<div id="buttons"></div>
+	<div id="buttons">
+		<span id="webworker-import-not-supported" style="display: none;">
+			Importing modules in web workers is not suppported in this browser! (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1247687">probably Firefox</a>)
+		</span>
+	</div>
 </body>
 </html>

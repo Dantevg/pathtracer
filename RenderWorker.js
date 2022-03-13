@@ -1,5 +1,3 @@
-import Scene from "./Scene.js"
-
 const console = {
 	log: (...data) => postMessage({type: "log", data: [...data]})
 }
@@ -10,6 +8,11 @@ let iterations = 0
 onmessage = function(e){
 	if(e.data.type == "init"){
 		// Load the specified scene
+		const Scene = import("./Scene.js")
+		if(!Scene.load){
+			this.postMessage({type: "import not supported"})
+			return
+		}
 		Scene.load(e.data.src, e.data.obj).then(module => {
 			scene = module
 			postMessage({type: "ready"})
